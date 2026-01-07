@@ -1,883 +1,371 @@
-/* ==================== RESET & BASE ==================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --primary: #028A0F;
-  --primary-dark: #026609;
-  --primary-light: #03a512;
-  --bg-light: #fdfaf6;
-  --bg-dark: #0a0e1a;
-  --text-light: #333;
-  --text-dark: #e8e8e8;
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-body {
-  font-family: 'Segoe UI', 'Arial', sans-serif;
-  background: var(--bg-light);
-  color: var(--text-light);
-  line-height: 1.6;
-  overflow-x: hidden;
-  transition: background 0.5s ease, color 0.5s ease;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 20% 50%, rgba(2, 138, 15, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(2, 138, 15, 0.05) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* ==================== NAVIGATION ==================== */
-.glass-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--glass-border);
-  z-index: 1000;
-  transition: var(--transition);
-}
-
-.nav-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: 1px;
-  text-shadow: 0 2px 10px rgba(2, 138, 15, 0.3);
-}
-
-.nav-links {
-  display: flex;
-  gap: 35px;
-}
-
-.nav-link {
-  color: var(--text-light);
-  text-decoration: none;
-  font-weight: 500;
-  position: relative;
-  transition: var(--transition);
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--primary);
-  transition: width 0.3s ease;
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
-  width: 100%;
-}
-
-.theme-toggle {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
-  padding: 10px 20px;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: var(--transition);
-  font-size: 1.2rem;
-}
-
-.theme-toggle:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow);
-}
-
-.dark-mode .moon-icon {
-  display: none;
-}
-
-.sun-icon {
-  display: none;
-}
-
-.dark-mode .sun-icon {
-  display: inline;
-}
-
-.dark-mode .moon-icon {
-  display: inline;
-}
-
-/* ==================== HERO SECTION ==================== */
-.hero {
-  position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  margin-top: 70px;
-}
-
-.hero-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  opacity: 0.05;
-  z-index: -1;
-}
-
-.hero-content {
-  z-index: 2;
-  animation: fadeInUp 1s ease;
-}
-
-.hero-title {
-  font-size: 6rem;
-  font-weight: 900;
-  margin-bottom: 20px;
-  letter-spacing: 3px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: glow 2s ease-in-out infinite;
-}
-
-.title-a {
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.title-a:hover {
-  transform: scale(1.1) rotate(-5deg);
-  display: inline-block;
-}
-
-.hero-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 40px;
-  color: var(--text-light);
-  opacity: 0.8;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-}
-
-.btn-primary, .btn-secondary {
-  padding: 15px 40px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: var(--transition);
-  border: 2px solid var(--primary);
-}
-
-.btn-primary {
-  background: var(--primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--primary-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(2, 138, 15, 0.3);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--primary);
-}
-
-.btn-secondary:hover {
-  background: var(--primary);
-  color: white;
-  transform: translateY(-3px);
-}
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 2s infinite;
-}
-
-.mouse {
-  width: 30px;
-  height: 50px;
-  border: 2px solid var(--primary);
-  border-radius: 20px;
-  position: relative;
-  margin: 0 auto 10px;
-}
-
-.mouse::before {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 8px;
-  background: var(--primary);
-  border-radius: 2px;
-  animation: scroll 1.5s infinite;
-}
-
-/* ==================== GLASS SECTIONS ==================== */
-.glass-section {
-  padding: 100px 20px;
-}
-
-.section-title {
-  text-align: center;
-  font-size: 3rem;
-  margin-bottom: 15px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.section-subtitle {
-  text-align: center;
-  font-size: 1.2rem;
-  margin-bottom: 60px;
-  opacity: 0.7;
-}
-
-.glass-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-}
-
-.glass-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-hover);
-}
-
-/* ==================== JOURNAL SECTION ==================== */
-.journal-section {
-  background: linear-gradient(180deg, transparent 0%, rgba(2, 138, 15, 0.02) 100%);
-}
-
-.flipbook-container {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto 60px;
-  padding: 20px;
-  overflow: hidden;
-}
-
-.flipbook-iframe {
-  width: 100%;
-  height: 700px;
-  border: none;
-  border-radius: 15px;
-}
-
-.journal-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 30px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.stat-card {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.stat-icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
-}
-
-.stat-number {
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 10px;
-}
-
-.stat-label {
-  font-size: 1rem;
-  opacity: 0.7;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* ==================== CAROUSEL ==================== */
-.carousel-section {
-  padding: 100px 20px;
-  background: rgba(2, 138, 15, 0.02);
-}
-
-.carousel {
-  position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 60px;
-}
-
-.carousel-track-container {
-  overflow: hidden;
-  border-radius: 20px;
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.carousel-item {
-  min-width: 100%;
-  padding: 10px;
-}
-
-.carousel-item img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 15px 15px 0 0;
-}
-
-.carousel-content {
-  padding: 30px;
-}
-
-.category {
-  display: inline-block;
-  background: var(--primary);
-  color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-
-.carousel-content h3 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  color: var(--primary);
-}
-
-.carousel-content p {
-  opacity: 0.8;
-}
-
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary);
-  z-index: 10;
-}
-
-.carousel-btn:hover {
-  background: var(--primary);
-  color: white;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.carousel-btn.prev {
-  left: 0;
-}
-
-.carousel-btn.next {
-  right: 0;
-}
-
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 30px;
-}
-
-.carousel-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(2, 138, 15, 0.2);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.carousel-dot.active {
-  background: var(--primary);
-  width: 30px;
-  border-radius: 6px;
-}
-
-/* ==================== ARTICLES GRID ==================== */
-.filter-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-bottom: 50px;
-}
-
-.filter-btn {
-  padding: 10px 25px;
-  border: 2px solid var(--primary);
-  background: transparent;
-  color: var(--primary);
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.filter-btn:hover,
-.filter-btn.active {
-  background: var(--primary);
-  color: white;
-}
-
-.articles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 30px;
-}
-
-.article-card {
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.article-image {
-  position: relative;
-  overflow: hidden;
-}
-
-.article-image img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.article-card:hover .article-image img {
-  transform: scale(1.1);
-}
-
-.article-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: var(--primary);
-  color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.article-body {
-  padding: 25px;
-}
-
-.article-body h3 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  color: var(--primary);
-}
-
-.article-body p {
-  opacity: 0.8;
-  margin-bottom: 20px;
-}
-
-.article-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 15px;
-  border-top: 1px solid var(--glass-border);
-}
-
-.article-date {
-  font-size: 0.9rem;
-  opacity: 0.7;
-}
-
-.read-more {
-  color: var(--primary);
-  font-weight: 600;
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-.read-more:hover {
-  transform: translateX(5px);
-}
-
-/* ==================== TEAM SECTION ==================== */
-.team-section {
-  padding: 100px 20px;
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.team-card {
-  text-align: center;
-  padding: 40px 30px;
-}
-
-.team-avatar {
-  font-size: 4rem;
-  margin-bottom: 20px;
-}
-
-.team-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: var(--primary);
-}
-
-.team-card p {
-  opacity: 0.7;
-}
-
-/* ==================== CONTACT SECTION ==================== */
-.contact-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.contact-form {
-  padding: 40px;
-}
-
-.form-group {
-  margin-bottom: 25px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 12px 20px;
-  border: 2px solid var(--glass-border);
-  border-radius: 10px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  color: var(--text-light);
-  font-family: inherit;
-  transition: var(--transition);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(2, 138, 15, 0.1);
-}
-
-.btn-submit {
-  width: 100%;
-  padding: 15px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.btn-submit:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(2, 138, 15, 0.3);
-}
-
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.info-card {
-  padding: 30px;
-  text-align: center;
-}
-
-.info-icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
-}
-
-.info-card h4 {
-  color: var(--primary);
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-}
-
-.info-card p {
-  opacity: 0.8;
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  font-size: 1.5rem;
-  margin-top: 10px;
-}
-
-.social-links a {
-  transition: var(--transition);
-}
-
-.social-links a:hover {
-  transform: scale(1.2);
-}
-
-/* ==================== FOOTER ==================== */
-.footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-  color: white;
-  padding: 60px 20px 20px;
-}
-
-.footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
-  margin-bottom: 40px;
-}
-
-.footer-section h3,
-.footer-section h4 {
-  color: var(--primary);
-  margin-bottom: 20px;
-}
-
-.footer-section p {
-  opacity: 0.8;
-  line-height: 1.8;
-}
-
-.footer-section ul {
-  list-style: none;
-}
-
-.footer-section ul li {
-  margin-bottom: 10px;
-}
-
-.footer-section ul li a {
-  color: white;
-  text-decoration: none;
-  opacity: 0.8;
-  transition: var(--transition);
-}
-
-.footer-section ul li a:hover {
-  color: var(--primary);
-  opacity: 1;
-  padding-left: 5px;
-}
-
-.footer-social {
-  display: flex;
-  gap: 15px;
-  font-size: 1.5rem;
-}
-
-.footer-social a {
-  transition: var(--transition);
-}
-
-.footer-social a:hover {
-  transform: scale(1.2);
-}
-
-.footer-bottom {
-  text-align: center;
-  padding-top: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0.6;
-}
-
-/* ==================== DARK MODE ==================== */
-body.dark-mode {
-  background: var(--bg-dark);
-  color: var(--text-dark);
-}
-
-body.dark-mode::before {
-  background: radial-gradient(circle at 20% 50%, rgba(2, 138, 15, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(2, 138, 15, 0.1) 0%, transparent 50%);
-}
-
-body.dark-mode .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .nav-link {
-  color: var(--text-dark);
-}
-
-body.dark-mode .form-group input,
-body.dark-mode .form-group select,
-body.dark-mode .form-group textarea {
-  color: var(--text-dark);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* ==================== ANIMATIONS ==================== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(-10px);
-  }
-}
-
-@keyframes scroll {
-  0% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(10px);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 5px rgba(2, 138, 15, 0.3));
-  }
-  50% {
-    filter: drop-shadow(0 0 20px rgba(2, 138, 15, 0.6));
-  }
-}
-
-/* ==================== RESPONSIVE ==================== */
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
+/**
+ * L'Ânnexe - Journal du Lycée
+ * Main Script
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  initCookieConsent();
+  initLogin();
+  initDate();
+  initTheme();
+  initI18n();
+  initStats();
+  initContactForm();
+});
+
+/* ==================== COOKIE CONSENT ==================== */
+function initCookieConsent() {
+  const cookieBanner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('cookie-accept');
+  const rejectBtn = document.getElementById('cookie-reject');
   
-  .hero-title {
-    font-size: 3rem;
-  }
+  if (!cookieBanner) return;
+
+  const consentGiven = localStorage.getItem('cookie-consent');
   
-  .hero-subtitle {
-    font-size: 1.2rem;
+  if (consentGiven) {
+    cookieBanner.style.display = 'none';
+    if (consentGiven === 'accepted') {
+      enableAnalytics();
+    }
+  } else {
+    cookieBanner.style.display = 'flex';
   }
+
+  acceptBtn.addEventListener('click', () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    localStorage.setItem('cookie-consent-date', new Date().toISOString());
+    enableAnalytics();
+    cookieBanner.style.display = 'none';
+  });
+
+  rejectBtn.addEventListener('click', () => {
+    localStorage.setItem('cookie-consent', 'rejected');
+    cookieBanner.style.display = 'none';
+  });
+}
+
+function enableAnalytics() {
+}
+
+/* ==================== LOGIN ==================== */
+function initLogin() {
+  const loginBtn = document.getElementById('login-btn');
+  const loginModal = document.getElementById('login-modal');
+  const loginClose = document.getElementById('login-close');
+  const loginForm = document.getElementById('login-form');
   
-  .hero-buttons {
-    flex-direction: column;
-  }
+  if (!loginBtn || !loginModal) return;
+
+  loginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+  });
+
+  loginClose.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+  });
+
+  loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) {
+      loginModal.style.display = 'none';
+    }
+  });
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    localStorage.setItem('user-email', email);
+    localStorage.setItem('user-session', 'active');
+    
+    alert(document.documentElement.lang === 'fr' ? 'Connexion réussie!' : 'Login successful!');
+    loginForm.reset();
+    loginModal.style.display = 'none';
+    
+    updateLoginButton();
+  });
+
+  updateLoginButton();
+}
+
+function updateLoginButton() {
+  const loginBtn = document.getElementById('login-btn');
+  const userSession = localStorage.getItem('user-session');
   
-  .section-title {
-    font-size: 2rem;
+  if (userSession === 'active') {
+    loginBtn.textContent = document.documentElement.lang === 'fr' ? 'Déconnexion' : 'Logout';
+    loginBtn.classList.add('logged-in');
+    
+    loginBtn.removeEventListener('click', null);
+    loginBtn.addEventListener('click', () => {
+      localStorage.removeItem('user-email');
+      localStorage.removeItem('user-session');
+      alert(document.documentElement.lang === 'fr' ? 'Déconnecté' : 'Logged out');
+      updateLoginButton();
+    });
+  } else {
+    loginBtn.textContent = document.documentElement.lang === 'fr' ? 'Connexion' : 'Login';
+    loginBtn.classList.remove('logged-in');
   }
+}
+
+/* ==================== DATE ==================== */
+function initDate() {
+  const dateEl = document.getElementById('current-date');
+  if (!dateEl) return;
   
-  .flipbook-iframe {
-    height: 500px;
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const lang = document.documentElement.lang || 'fr';
+  dateEl.textContent = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', options);
+}
+
+/* ==================== THEME ==================== */
+function initTheme() {
+  const toggleBtn = document.getElementById('toggle-dark');
+  if (!toggleBtn) return;
+
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  toggleBtn.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  });
+}
+
+/* ==================== I18N ==================== */
+const translations = {
+  fr: {
+    edition_vol: "Volume 1 • N° 1",
+    location: "Avignon, France",
+    nav_home: "Accueil",
+    nav_journal: "Le Journal",
+    nav_articles: "Rubriques",
+    nav_team: "L'Équipe",
+    nav_contact: "Contact",
+    cat_edito: "ÉDITO",
+    hero_title: "Bienvenue dans la nouvelle ère de L'Ânnexe",
+    hero_excerpt: "Votre journal étudiant fait peau neuve. Plus moderne, plus engagé, plus proche de vous. Découvrez notre vision pour ce nouveau chapitre de la vie lycéenne.",
+    read_more_btn: "Lire l'édition complète",
+    trending_now: "À LA UNE",
+    cat_culture: "CULTURE",
+    side1_title: "Sélection culturelle de l'hiver",
+    cat_sport: "SPORT",
+    side2_title: "Nos équipes brillent en championnat",
+    cat_vie: "VIE LYCÉENNE",
+    side3_title: "Les nouveaux projets du CVL",
+    journal_title: "Édition Interactive",
+    journal_subtitle: "Feuilletez le dernier numéro comme si vous y étiez",
+    stat_edition: "Édition",
+    stat_articles: "Articles",
+    stat_team: "Membres",
+    stat_pages: "Pages",
+    rubrics_title: "Dernières Rubriques",
+    filter_all: "Toutes",
+    cat_actu: "ACTUALITÉS",
+    art1_title: "Interview du Proviseur",
+    art1_excerpt: "Découvrez les projets et la vision de notre chef d'établissement pour cette nouvelle année scolaire...",
+    art2_title: "Retour sur la Fête de la Science",
+    art2_excerpt: "Expériences, découvertes et passion : retour sur les moments forts de cet événement scientifique...",
+    art3_title: "Le Club de Théâtre en répétition",
+    art3_excerpt: "Plongée au cœur des coulisses de la future pièce de théâtre montée par nos talentueux élèves...",
+    art4_title: "Conseils pour réussir ses examens",
+    art4_excerpt: "Nos meilleures astuces pour réviser efficacement et aborder les épreuves avec sérénité...",
+    team_title: "Le Comité de Rédaction",
+    role_chief: "RÉDACTEUR EN CHEF",
+    role_chief_desc: "Vision éditoriale et coordination",
+    role_journalists: "JOURNALISTES",
+    role_journalists_desc: "Investigation et rédaction",
+    role_design: "GRAPHISME",
+    role_design_desc: "Mise en page et identité visuelle",
+    role_photo: "PHOTOGRAPHIE",
+    role_photo_desc: "Reportages visuels",
+    contact_title: "Nous Écrire",
+    label_name: "Nom",
+    label_email: "Email",
+    label_subject: "Sujet",
+    opt_select: "Choisir...",
+    opt_article: "Proposer un article",
+    opt_suggestion: "Suggestion",
+    opt_team: "Rejoindre l'équipe",
+    label_message: "Message",
+    btn_send: "Envoyer le message",
+    find_us: "Où nous trouver",
+    label_office: "Rédaction",
+    label_mail: "Contact Direct",
+    all_rights: "Tous droits réservés.",
+    legal: "Mentions Légales",
+    privacy: "Confidentialité",
+    cookie_message: "Ce site utilise des cookies pour améliorer votre expérience. Nous respectons votre vie privée.",
+    cookie_accept: "Accepter",
+    cookie_reject: "Refuser",
+    cookie_policy: "Plus d'infos",
+    login_button: "Connexion",
+    login_title: "Connexion",
+    login_password: "Mot de passe",
+    login_submit: "Se connecter"
+  },
+  en: {
+    edition_vol: "Volume 1 • No. 1",
+    location: "Avignon, France",
+    nav_home: "Home",
+    nav_journal: "The Journal",
+    nav_articles: "Sections",
+    nav_team: "The Team",
+    nav_contact: "Contact",
+    cat_edito: "EDITORIAL",
+    hero_title: "Welcome to the new era of L'Ânnexe",
+    hero_excerpt: "Your student newspaper has a new look. More modern, more engaged, closer to you. Discover our vision for this new chapter of high school life.",
+    read_more_btn: "Read the full edition",
+    trending_now: "TRENDING",
+    cat_culture: "CULTURE",
+    side1_title: "Winter cultural selection",
+    cat_sport: "SPORT",
+    side2_title: "Our teams shine in the championship",
+    cat_vie: "STUDENT LIFE",
+    side3_title: "New CVL projects",
+    journal_title: "Interactive Edition",
+    journal_subtitle: "Flip through the latest issue as if you were there",
+    stat_edition: "Edition",
+    stat_articles: "Articles",
+    stat_team: "Members",
+    stat_pages: "Pages",
+    rubrics_title: "Latest Sections",
+    filter_all: "All",
+    cat_actu: "NEWS",
+    art1_title: "Interview with the Principal",
+    art1_excerpt: "Discover the projects and vision of our head of school for this new school year...",
+    art2_title: "Science Fair Highlights",
+    art2_excerpt: "Experiments, discoveries, and passion: a look back at the highlights of this scientific event...",
+    art3_title: "Drama Club in Rehearsal",
+    art3_excerpt: "A dive into the backstage of the future play staged by our talented students...",
+    art4_title: "Tips for Exam Success",
+    art4_excerpt: "Our best tips for revising effectively and approaching exams with confidence...",
+    team_title: "Editorial Board",
+    role_chief: "EDITOR-IN-CHIEF",
+    role_chief_desc: "Editorial vision and coordination",
+    role_journalists: "JOURNALISTS",
+    role_journalists_desc: "Investigation and writing",
+    role_design: "GRAPHIC DESIGN",
+    role_design_desc: "Layout and visual identity",
+    role_photo: "PHOTOGRAPHY",
+    role_photo_desc: "Visual reporting",
+    contact_title: "Write to Us",
+    label_name: "Name",
+    label_email: "Email",
+    label_subject: "Subject",
+    opt_select: "Choose...",
+    opt_article: "Suggest an article",
+    opt_suggestion: "Suggestion",
+    opt_team: "Join the team",
+    label_message: "Message",
+    btn_send: "Send message",
+    find_us: "Find Us",
+    label_office: "Editorial Office",
+    label_mail: "Direct Contact",
+    all_rights: "All rights reserved.",
+    legal: "Legal Notice",
+    privacy: "Privacy Policy",
+    cookie_message: "This site uses cookies to enhance your experience. We respect your privacy.",
+    cookie_accept: "Accept",
+    cookie_reject: "Reject",
+    cookie_policy: "Learn more",
+    login_button: "Login",
+    login_title: "Login",
+    login_password: "Password",
+    login_submit: "Sign in"
   }
+};
+
+function initI18n() {
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const savedLang = localStorage.getItem('lang') || 'fr';
   
-  .contact-content {
-    grid-template-columns: 1fr;
-  }
+  updateLanguage(savedLang);
+
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = btn.getAttribute('data-lang');
+      updateLanguage(lang);
+      localStorage.setItem('lang', lang);
+      
+      // Update UI active state
+      langBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+}
+
+function updateLanguage(lang) {
+  document.documentElement.lang = lang;
+  const elements = document.querySelectorAll('[data-i18n]');
   
-  .carousel {
-    padding: 0 50px;
+  elements.forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = translations[lang][key];
+      } else {
+        el.textContent = translations[lang][key];
+      }
+    }
+  });
+
+  initDate(); // Refresh date format
+}
+
+/* ==================== STATS COUNTER ==================== */
+function initStats() {
+  const stats = document.querySelectorAll('.stat-value');
+  const observerOptions = { threshold: 0.5 };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateStat(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  stats.forEach(stat => observer.observe(stat));
+}
+
+function animateStat(el) {
+  const target = parseInt(el.getAttribute('data-target'));
+  const duration = 2000; // 2s
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const current = Math.floor(progress * target);
+    
+    el.textContent = current;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = target;
+    }
   }
+
+  requestAnimationFrame(update);
+}
+
+/* ==================== CONTACT FORM ==================== */
+function initContactForm() {
+  const form = document.getElementById('newspaper-contact-form');
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    const btn = form.querySelector('button');
+    btn.disabled = true;
+    btn.textContent = document.documentElement.lang === 'fr' ? 'Envoi en cours...' : 'Sending...';
+  });
 }
