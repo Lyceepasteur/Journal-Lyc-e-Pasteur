@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3MFPG57DE0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3MFPG57DE0');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de Confidentialité | L'Ânnexe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="legal-page">
+  <header class="masthead small-masthead">
+    <div class="container">
+      <h1 class="main-logo"><a href="Index.html">L'Ânnexe</a></h1>
+    </div>
+  </header>
+
+  <main class="container legal-content">
+    <section class="legal-section-text">
+      <h2>Politique de Confidentialité</h2>
+      
+      <h3>1. Collecte des données</h3>
+      <p>Nous ne collectons aucune donnée personnelle automatisée via des cookies tiers ou des traceurs publicitaires.</p>
+      <p>Les seules informations recueillies sont celles que vous nous envoyez volontairement via le formulaire de contact (Nom, Email, Message).</p>
+
+      <h3>2. Utilisation des données</h3>
+      <p>Vos données sont exclusivement utilisées pour répondre à vos demandes. Elles ne sont ni vendues, ni louées, ni partagées avec des tiers.</p>
+
+      <h3>3. Conservation</h3>
+      <p>Les messages envoyés via le formulaire sont conservés le temps nécessaire à leur traitement.</p>
+
+      <h3>4. Cookies</h3>
+      <p>Ce site utilise un système de consentement aux cookies conforme aux lois numériques européennes. Vous pouvez accepter ou refuser les cookies via la banneau de consentement qui s'affiche au bas de la page. Les cookies acceptés sont stockés localement pour mémoriser vos préférences.</p>
+
+      <h3>5. Contact</h3>
+      <p>Pour toute question concernant vos données personnelles, contactez-nous à : annexe.pasteur@gmail.com.</p>
+    </section>
+    <div class="back-link">
+        <a href="Index.html" class="btn-newspaper">← Retour à l'accueil</a>
+    </div>
+  </main>
+
+  <footer class="footer-newspaper">
+    <div class="container">
+      <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur.</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
