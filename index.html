@@ -1,371 +1,237 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3MFPG57DE0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-3MFPG57DE0');
-</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'Ânnexe - Journal du Lycée</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; frame-src https:;">
+  
+  <title>L'Ânnexe | Le Journal du Lycée Louis Pasteur</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3MFPG57DE0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3MFPG57DE0');
+  </script>
 </head>
 <body>
-  <!-- NAVIGATION GLASSMORPHISM -->
-  <nav class="glass-nav">
-    <div class="nav-container">
-      <div class="logo">L'Ânnexe</div>
-      <div class="nav-links">
-        <a href="#accueil" class="nav-link active">Accueil</a>
-        <a href="#journal" class="nav-link">Le Journal</a>
-        <a href="#articles" class="nav-link">Articles</a>
-        <a href="#equipe" class="nav-link">L'Équipe</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </div>
-      <button id="toggle-dark" class="theme-toggle">
-        <span class="sun-icon">☀️</span>
-        <span class="moon-icon">🌙</span>
-      </button>
+  <!-- LOGIN MODAL -->
+  <div id="login-modal" class="login-modal">
+    <div class="login-content">
+      <button class="login-close" id="login-close" aria-label="Close">&times;</button>
+      <h2 data-i18n="login_title">Connexion</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email" data-i18n="label_email">Email</label>
+          <input type="email" id="login-email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password" data-i18n="login_password">Mot de passe</label>
+          <input type="password" id="login-password" name="password" required>
+        </div>
+        <button type="submit" class="btn-newspaper" data-i18n="login_submit">Se connecter</button>
+      </form>
     </div>
-  </nav>
+  </div>
 
-  <!-- HERO SECTION -->
-  <header class="hero" id="accueil">
-    <div class="hero-background"></div>
-    <div class="hero-content">
-      <h1 class="hero-title">
-        <span class="title-l">L</span>'<span class="title-a" id="title-a">Â</span>nnexe
-      </h1>
-      <p class="hero-subtitle">Le journal étudiant qui raconte votre lycée</p>
-      <div class="hero-buttons">
-        <a href="#journal" class="btn-primary">Découvrir le journal</a>
-        <a href="#articles" class="btn-secondary">Lire les articles</a>
+  <!-- COOKIE CONSENT BANNER -->
+  <div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-content">
+      <p id="cookie-text" data-i18n="cookie_message">Ce site utilise des cookies pour améliorer votre expérience. Nous respectons votre vie privée.</p>
+      <div class="cookie-buttons">
+        <button id="cookie-accept" class="cookie-btn accept" data-i18n="cookie_accept">Accepter</button>
+        <button id="cookie-reject" class="cookie-btn reject" data-i18n="cookie_reject">Refuser</button>
+        <a href="politique-confidentialite.html" class="cookie-link" data-i18n="cookie_policy">Plus d'infos</a>
       </div>
     </div>
-    <div class="scroll-indicator">
-      <div class="mouse"></div>
-      <p>Scroll</p>
+  </div>
+
+  <!-- TOP BAR (Utility) -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-content">
+        <span class="date" id="current-date">Mercredi 7 Janvier 2026</span>
+        <div class="top-bar-actions">
+          <div class="language-selector">
+            <button class="lang-btn active" data-lang="fr">FR</button>
+            <span class="divider">|</span>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <button id="toggle-dark" class="theme-toggle" aria-label="Changer le thème">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+          </button>
+          <button id="login-btn" class="login-btn" data-i18n="login_button">Connexion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / MASTHEAD -->
+  <header class="masthead">
+    <div class="container">
+      <div class="masthead-inner">
+        <div class="edition-info left" data-i18n="edition_vol">Volume 1 • N° 1</div>
+        <div class="logo-container">
+          <h1 class="main-logo">L'Ânnexe</h1>
+        </div>
+        <div class="edition-info right" data-i18n="location">Avignon, France</div>
+      </div>
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a href="#accueil" class="nav-link active" data-i18n="nav_home">Accueil</a></li>
+          <li><a href="#journal" class="nav-link" data-i18n="nav_journal">Le Journal</a></li>
+          <li><a href="#contact" class="nav-link" data-i18n="nav_contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <!-- JOURNAL FLIPBOOK SECTION -->
-  <section class="journal-section glass-section" id="journal">
+  <!-- FRONTPAGE HERO -->
+  <section class="hero-frontpage" id="accueil">
     <div class="container">
-      <h2 class="section-title">Le Journal Interactif</h2>
-      <p class="section-subtitle">Feuilletez la dernière édition de L'Ânnexe</p>
-      
-      <div class="flipbook-container glass-card">
-        <iframe 
-          src="https://online.fliphtml5.com/wueuu/annexe_1/#p=1"
-          class="flipbook-iframe"
-          allowfullscreen
-          loading="lazy">
-        </iframe>
-      </div>
-
-      <div class="journal-stats">
-        <div class="stat-card glass-card">
-          <div class="stat-icon">📰</div>
-          <div class="stat-number" data-target="1">0</div>
-          <div class="stat-label">Édition</div>
+      <div class="hero-grid">
+        <div class="main-feature">
+          <article class="featured-article">
+            <div class="category-tag" data-i18n="cat_edito">ÉDITO</div>
+            <h2 class="article-title large">
+              <a href="#" data-i18n="hero_title">Bienvenue dans la nouvelle ère de L'Ânnexe</a>
+            </h2>
+            <div class="article-meta">
+              <span class="author">Par La Rédaction</span> • <span class="time">5 min read</span>
+            </div>
+            <p class="article-excerpt" data-i18n="hero_excerpt">
+              Votre journal étudiant fait peau neuve. Plus moderne, plus engagé, plus proche de vous. Découvrez notre vision pour ce nouveau chapitre de la vie lycéenne.
+            </p>
+            <a href="#journal" class="btn-newspaper" data-i18n="read_more_btn">Lire l'édition complète</a>
+          </article>
+          <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1504711432819-062757521621?auto=format&fit=crop&w=1200&q=80" alt="Newspaper Feature" loading="lazy">
+          </div>
         </div>
-        <div class="stat-card glass-card">
-          <div class="stat-icon">✍️</div>
-          <div class="stat-number" data-target="15">0</div>
-          <div class="stat-label">Articles</div>
-        </div>
-        <div class="stat-card glass-card">
-          <div class="stat-icon">👥</div>
-          <div class="stat-number" data-target="20">0</div>
-          <div class="stat-label">Contributeurs</div>
-        </div>
-        <div class="stat-card glass-card">
-          <div class="stat-icon">📖</div>
-          <div class="stat-number" data-target="24">0</div>
-          <div class="stat-label">Pages</div>
+        
+        <div class="side-features">
+          <h3 class="side-title" data-i18n="trending_now">À LA UNE</h3>
+          <div class="side-article-list">
+            <article class="side-article">
+              <div class="category-tag small" data-i18n="cat_culture">CULTURE</div>
+              <h4><a href="#" data-i18n="side1_title">Sélection culturelle de l'hiver</a></h4>
+            </article>
+            <article class="side-article">
+              <div class="category-tag small" data-i18n="cat_sport">SPORT</div>
+              <h4><a href="#" data-i18n="side2_title">Nos équipes brillent en championnat</a></h4>
+            </article>
+            <article class="side-article">
+              <div class="category-tag small" data-i18n="cat_vie">VIE LYCÉENNE</div>
+              <h4><a href="#" data-i18n="side3_title">Les nouveaux projets du Lycée</a></h4>
+            </article>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CAROUSEL SECTION -->
-  <section class="carousel-section" id="articles">
+  <!-- INTERACTIVE JOURNAL SECTION -->
+  <section class="journal-section" id="journal">
     <div class="container">
-      <h2 class="section-title">Articles à la Une</h2>
-      <p class="section-subtitle">Découvrez les derniers contenus de notre rédaction</p>
+      <div class="section-header-newspaper">
+        <h2 data-i18n="journal_title">Édition Interactive</h2>
+        <p class="section-subtitle" data-i18n="journal_subtitle">Feuilletez le dernier numéro comme si vous y étiez</p>
+      </div>
       
-      <div class="carousel">
-        <button class="carousel-btn prev" aria-label="Précédent">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
+      <div class="flipbook-wrapper">
+        <div class="flipbook-container">
+          <iframe 
+            src="https://online.fliphtml5.com/wueuu/gnsx/" 
+            class="flipbook-iframe"
+            allowfullscreen
+            loading="lazy"
+            title="Interactive Journal">
+          </iframe>
+        </div>
         
-        <div class="carousel-track-container">
-          <div class="carousel-track">
-            <div class="carousel-item glass-card">
-              <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80" alt="Édito">
-              <div class="carousel-content">
-                <span class="category">Édito</span>
-                <h3>L'Édito du Proviseur</h3>
-                <p>Mot d'introduction de notre équipe de direction pour cette nouvelle édition</p>
-              </div>
-            </div>
-
-            <div class="carousel-item glass-card">
-              <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80" alt="Actualités">
-              <div class="carousel-content">
-                <span class="category">Actualités</span>
-                <h3>Événements du Lycée</h3>
-                <p>Retour sur les moments forts de ce trimestre au sein de notre établissement</p>
-              </div>
-            </div>
-
-            <div class="carousel-item glass-card">
-              <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80" alt="Culture">
-              <div class="carousel-content">
-                <span class="category">Culture</span>
-                <h3>Critiques & Découvertes</h3>
-                <p>Nos recommandations culturelles : livres, films, musique et plus encore</p>
-              </div>
-            </div>
-
-            <div class="carousel-item glass-card">
-              <img src="https://images.unsplash.com/photo-1581092795363-d14a5d7f434d?auto=format&fit=crop&w=800&q=80" alt="Vie étudiante">
-              <div class="carousel-content">
-                <span class="category">Vie Étudiante</span>
-                <h3>Clubs & Associations</h3>
-                <p>Zoom sur les activités extra-scolaires qui animent notre lycée</p>
-              </div>
-            </div>
-
-            <div class="carousel-item glass-card">
-              <img src="https://images.unsplash.com/photo-1596496055414-5ecf9c2a3e48?auto=format&fit=crop&w=800&q=80" alt="Interviews">
-              <div class="carousel-content">
-                <span class="category">Interview</span>
-                <h3>Paroles d'Enseignants</h3>
-                <p>Rencontre avec les professeurs qui font vivre notre établissement</p>
-              </div>
-            </div>
+        <div class="journal-stats-newspaper">
+          <div class="stat-item">
+            <span class="stat-value" data-target="1">0</span>
+            <span class="stat-label" data-i18n="stat_edition">Édition</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="8">0</span>
+            <span class="stat-label" data-i18n="stat_articles">Articles</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="8">0</span>
+            <span class="stat-label" data-i18n="stat_team">Membres</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="20">0</span>
+            <span class="stat-label" data-i18n="stat_pages">Pages</span>
           </div>
         </div>
-
-        <button class="carousel-btn next" aria-label="Suivant">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-
-        <div class="carousel-dots"></div>
       </div>
     </div>
   </section>
 
-  <!-- ARTICLES GRID -->
-  <section class="articles-section glass-section">
-    <div class="container">
-      <h2 class="section-title">Tous les Articles</h2>
-      
-      <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all">Tous</button>
-        <button class="filter-btn" data-filter="edito">Édito</button>
-        <button class="filter-btn" data-filter="actualites">Actualités</button>
-        <button class="filter-btn" data-filter="culture">Culture</button>
-        <button class="filter-btn" data-filter="vie">Vie Étudiante</button>
-        <button class="filter-btn" data-filter="sport">Sport</button>
-      </div>
 
-      <div class="articles-grid">
-        <article class="article-card glass-card" data-category="edito">
-          <div class="article-image">
-            <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80" alt="Article">
-            <span class="article-badge">Édito</span>
-          </div>
-          <div class="article-body">
-            <h3>Bienvenue dans L'Ânnexe</h3>
-            <p>Découvrez le projet ambitieux de notre journal étudiant et son équipe passionnée...</p>
-            <div class="article-footer">
-              <span class="article-date">📅 Novembre 2025</span>
-              <a href="#" class="read-more">Lire →</a>
-            </div>
-          </div>
-        </article>
 
-        <article class="article-card glass-card" data-category="actualites">
-          <div class="article-image">
-            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80" alt="Article">
-            <span class="article-badge">Actualités</span>
-          </div>
-          <div class="article-body">
-            <h3>Les Nouveautés du Campus</h3>
-            <p>Tour d'horizon des changements et améliorations dans notre lycée cette année...</p>
-            <div class="article-footer">
-              <span class="article-date">📅 Novembre 2025</span>
-              <a href="#" class="read-more">Lire →</a>
-            </div>
-          </div>
-        </article>
 
-        <article class="article-card glass-card" data-category="culture">
-          <div class="article-image">
-            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80" alt="Article">
-            <span class="article-badge">Culture</span>
-          </div>
-          <div class="article-body">
-            <h3>Sélection Culturelle</h3>
-            <p>Nos coups de cœur du moment : livres, séries, films et musique...</p>
-            <div class="article-footer">
-              <span class="article-date">📅 Novembre 2025</span>
-              <a href="#" class="read-more">Lire →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="article-card glass-card" data-category="vie">
-          <div class="article-image">
-            <img src="https://images.unsplash.com/photo-1581092795363-d14a5d7f434d?auto=format&fit=crop&w=800&q=80" alt="Article">
-            <span class="article-badge">Vie Étudiante</span>
-          </div>
-          <div class="article-body">
-            <h3>Les Clubs du Lycée</h3>
-            <p>Présentation des nombreux clubs et associations qui rythment la vie du lycée...</p>
-            <div class="article-footer">
-              <span class="article-date">📅 Novembre 2025</span>
-              <a href="#" class="read-more">Lire →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="article-card glass-card" data-category="actualites">
-          <div class="article-image">
-            <img src="https://images.unsplash.com/photo-1596496055414-5ecf9c2a3e48?auto=format&fit=crop&w=800&q=80" alt="Article">
-            <span class="article-badge">Interview</span>
-          </div>
-          <div class="article-body">
-            <h3>Interview du Proviseur</h3>
-            <p>Entretien exclusif avec la direction sur les projets à venir...</p>
-            <div class="article-footer">
-              <span class="article-date">📅 Novembre 2025</span>
-              <a href="#" class="read-more">Lire →</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="article-card glass-card" data-category="sport">
-          <div class="article-image">
-            <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=800&q=80" alt="Article">
-            <span class="article-badge">Sport</span>
-          </div>
-          <div class="article-body">
-            <h3>Résultats Sportifs</h3>
-            <p>Retour sur les compétitions et performances de nos équipes...</p>
-            <div class="article-footer">
-              <span class="article-date">📅 Novembre 2025</span>
-              <a href="#" class="read-more">Lire →</a>
-            </div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- TEAM SECTION -->
-  <section class="team-section" id="equipe">
-    <div class="container">
-      <h2 class="section-title">L'Équipe de Rédaction</h2>
-      <p class="section-subtitle">Les talents derrière L'Ânnexe</p>
-      
-      <div class="team-grid">
-        <div class="team-card glass-card">
-          <div class="team-avatar">👨‍💼</div>
-          <h3>Rédacteur en Chef</h3>
-          <p>Supervise la ligne éditoriale</p>
-        </div>
-        
-        <div class="team-card glass-card">
-          <div class="team-avatar">✍️</div>
-          <h3>Journalistes</h3>
-          <p>Rédigent les articles</p>
-        </div>
-        
-        <div class="team-card glass-card">
-          <div class="team-avatar">🎨</div>
-          <h3>Graphistes</h3>
-          <p>Créent le design du journal</p>
-        </div>
-        
-        <div class="team-card glass-card">
-          <div class="team-avatar">📸</div>
-          <h3>Photographes</h3>
-          <p>Capturent les moments</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- CONTACT SECTION -->
-  <section class="contact-section glass-section" id="contact">
+  <section class="contact-newspaper" id="contact">
     <div class="container">
-      <h2 class="section-title">Nous Contacter</h2>
-      <p class="section-subtitle">Une idée d'article ? Une suggestion ? Écrivez-nous !</p>
-      
-      <div class="contact-content">
-        <form class="contact-form glass-card">
-          <div class="form-group">
-            <label for="name">Nom</label>
-            <input type="text" id="name" placeholder="Votre nom" required>
+      <div class="contact-grid">
+        <div class="contact-form-container">
+          <h2 data-i18n="contact_title">Nous Écrire</h2>
+          <form id="newspaper-contact-form" action="https://formsubmit.co/annexe.pasteur@gmail.com" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name" data-i18n="label_name">Nom</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="email" data-i18n="label_email">Email</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="subject" data-i18n="label_subject">Sujet</label>
+              <select id="subject" name="subject" required>
+                <option value="" data-i18n="opt_select">Choisir...</option>
+                <option value="article" data-i18n="opt_article">Proposer un article</option>
+                <option value="suggestion" data-i18n="opt_suggestion">Suggestion</option>
+                <option value="team" data-i18n="opt_team">Rejoindre l'équipe</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message" data-i18n="label_message">Message</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <input type="hidden" name="_captcha" value="false">
+            <button type="submit" class="btn-newspaper-submit" data-i18n="btn_send">Envoyer le message</button>
+          </form>
+        </div>
+        <div class="contact-info-newspaper">
+          <h2 data-i18n="find_us">Où nous trouver</h2>
+          <div class="info-block">
+            <h4 data-i18n="label_office">Rédaction</h4>
+            <p>Lycée Louis Pasteur<br>Avignon, France</p>
           </div>
-          
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="votre.email@exemple.fr" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="subject">Sujet</label>
-            <select id="subject" required>
-              <option value="">Choisissez un sujet</option>
-              <option value="article">Proposer un article</option>
-              <option value="suggestion">Suggestion</option>
-              <option value="rejoindre">Rejoindre l'équipe</option>
-              <option value="autre">Autre</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" rows="5" placeholder="Votre message..." required></textarea>
-          </div>
-          
-          <button type="submit" class="btn-submit">Envoyer le message</button>
-        </form>
-        
-        <div class="contact-info">
-          <div class="info-card glass-card">
-            <div class="info-icon">📧</div>
-            <h4>Email</h4>
+          <div class="info-block">
+            <h4 data-i18n="label_mail">Contact Direct</h4>
             <p>annexe.pasteur@gmail.com</p>
           </div>
-          
-          <div class="info-card glass-card">
-            <div class="info-icon">📍</div>
-            <h4>Localisation</h4>
-            <p>Le Lycée Louis Pasteur<br>Avignon</p>
-          </div>
-          
-          <div class="info-card glass-card">
-            <div class="info-icon">🔗</div>
-            <h4>Réseaux Sociaux</h4>
-            <div class="social-links">
-              <a href="#" aria-label="Instagram">📷</a>
-              <a href="#" aria-label="Twitter">🐦</a>
-              <a href="#" aria-label="Facebook">👤</a>
-            </div>
+          <div class="social-links-newspaper">
+            <a href="https://www.instagram.com/annexe_pasteur?igsh=MTR3cHQ0ZnY4dGk0Yw==" aria-label="Instagram">Instagram</a>
           </div>
         </div>
       </div>
@@ -373,49 +239,18 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="footer">
+  <footer class="footer-newspaper">
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>L'Ânnexe</h3>
-          <p>Le journal étudiant qui raconte votre lycée avec passion et créativité.</p>
-        </div>
-        
-        <div class="footer-section">
-          <h4>Navigation</h4>
-          <ul>
-            <li><a href="#accueil">Accueil</a></li>
-            <li><a href="#journal">Le Journal</a></li>
-            <li><a href="#articles">Articles</a></li>
-            <li><a href="#equipe">L'Équipe</a></li>
-          </ul>
-        </div>
-        
-        <div class="footer-section">
-          <h4>Légal</h4>
-          <ul>
-            <li><a href="#">Mentions légales</a></li>
-            <li><a href="#">Politique de confidentialité</a></li>
-            <li><a href="#">Crédits</a></li>
-          </ul>
-        </div>
-        
-        <div class="footer-section">
-          <h4>Nous Suivre</h4>
-          <div class="footer-social">
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="Twitter">🐦</a>
-            <a href="#" aria-label="Facebook">👤</a>
-          </div>
-        </div>
-      </div>
-      
       <div class="footer-bottom">
-        <p>&copy; 2025 L'Ânnexe - Tous droits réservés</p>
+        <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur. <span data-i18n="all_rights">Tous droits réservés.</span></p>
+        <div class="footer-links">
+          <a href="mentions-legales.html" data-i18n="legal">Mentions Légales</a>
+          <a href="politique-confidentialite.html" data-i18n="privacy">Confidentialité</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
