@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3MFPG57DE0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3MFPG57DE0');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentions Légales | L'Ânnexe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="legal-page">
+  <header class="masthead small-masthead">
+    <div class="container">
+      <h1 class="main-logo"><a href="Index.html">L'Ânnexe</a></h1>
+    </div>
+  </header>
+
+  <main class="container legal-content">
+    <section class="legal-section-text">
+      <h2>Mentions Légales</h2>
+      
+      <h3>1. Édition du site</h3>
+      <p>Le site <strong>L'Ânnexe</strong> est édité par le journal lycéen du Lycée Louis Pasteur d'Avignon.</p>
+      <p><strong>Responsable de la publication :</strong> L'équipe du journal.</p>
+      <p><strong>Adresse :</strong> Lycée Louis Pasteur, Avignon, France.</p>
+      <p><strong>Email :</strong> annexe.pasteur@gmail.com</p>
+
+      <h3>2. Hébergement</h3>
+      <p>Le site est hébergé par des plateformes de déploiement statique (Vercel/GitHub Pages).</p>
+
+      <h3>3. Propriété intellectuelle</h3>
+      <p>Tous les contenus présents sur le site (textes, photographies, logos) sont la propriété exclusive de L'Ânnexe, sauf mention contraire (crédits photos Unsplash). Toute reproduction est interdite sans accord préalable.</p>
+
+      <h3>4. Crédits</h3>
+      <p>Design & Développement : Zencoder Agency.</p>
+      <p>Images : Unsplash.</p>
+    </section>
+    <div class="back-link">
+        <a href="Index.html" class="btn-newspaper">← Retour à l'accueil</a>
+    </div>
+  </main>
+
+  <footer class="footer-newspaper">
+    <div class="container">
+      <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur.</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
