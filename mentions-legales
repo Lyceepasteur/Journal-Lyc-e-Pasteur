@@ -56,6 +56,6 @@
       <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur.</p>
     </div>
   </footer>
-  <script src="script.js"></script>
+   <script src="/Journal-Lyc-e-Pasteur/js/script.js"></script>
 </body>
 </html>
