@@ -264,6 +264,46 @@ a {
   padding: 5px 10px;
 }
 
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 6px;
+  user-select: none;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--sepia);
+}
+
+.remember-me span {
+  color: var(--ink);
+}
+
+.forgot-password {
+  color: var(--sepia);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+  color: var(--ink);
+}
+
 @media (max-width: 768px) {
   .login-content {
     padding: 30px 20px;
@@ -271,6 +311,17 @@ a {
 
   .login-content h2 {
     font-size: 1.5rem;
+  }
+
+  .login-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .forgot-password {
+    width: 100%;
+    text-align: right;
   }
 }
 
