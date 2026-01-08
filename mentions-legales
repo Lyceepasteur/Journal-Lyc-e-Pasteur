@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
  
-<link rel="stylesheet" href="/Journal-Lyc-e-Pasteur/css/style.css">
+<link rel="stylesheet" href="/Journal-Lyc-e-Pasteur/css/style.css/">
 
 </head>
 <body class="legal-page">
@@ -47,7 +47,7 @@
       <p>Images : Unsplash.</p>
     </section>
     <div class="back-link">
-        <a href="/Journal-Lyc-e-Pasteur/index.html" class="btn-newspaper">← Retour à l'accueil</a>
+        <a href="/Journal-Lyc-e-Pasteur/index.html/" class="btn-newspaper">← Retour à l'accueil</a>
     </div>
   </main>
 
@@ -56,6 +56,6 @@
       <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur.</p>
     </div>
   </footer>
-   <script src="/Journal-Lyc-e-Pasteur/js/script.js"></script>
+   <script src="/Journal-Lyc-e-Pasteur/js/script.js/"></script>
 </body>
 </html>
