@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+a<!DOCTYPE html>
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -13,8 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   
-  <!-- CHEMIN CORRIGÉ POUR GITHUB PAGES -->
-  <link rel="stylesheet" href="/Journal-Lyc-e-Pasteur/style.css">
+  <link rel="stylesheet" href="style.css">
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-3MFPG57DE0"></script>
@@ -26,25 +25,6 @@
   </script>
 </head>
 <body>
-  <!-- LOGIN MODAL -->
-  <div id="login-modal" class="login-modal">
-    <div class="login-content">
-      <button class="login-close" id="login-close" aria-label="Close">&times;</button>
-      <h2 data-i18n="login_title">Connexion</h2>
-      <form id="login-form">
-        <div class="form-group">
-          <label for="login-email" data-i18n="label_email">Email</label>
-          <input type="email" id="login-email" name="email" required>
-        </div>
-        <div class="form-group">
-          <label for="login-password" data-i18n="login_password">Mot de passe</label>
-          <input type="password" id="login-password" name="password" required>
-        </div>
-        <button type="submit" class="btn-newspaper" data-i18n="login_submit">Se connecter</button>
-      </form>
-    </div>
-  </div>
-
   <!-- COOKIE CONSENT BANNER -->
   <div id="cookie-banner" class="cookie-banner">
     <div class="cookie-content">
@@ -52,7 +32,7 @@
       <div class="cookie-buttons">
         <button id="cookie-accept" class="cookie-btn accept" data-i18n="cookie_accept">Accepter</button>
         <button id="cookie-reject" class="cookie-btn reject" data-i18n="cookie_reject">Refuser</button>
-        <a href="/Journal-Lyc-e-Pasteur/politique-confidentialite.html" class="cookie-link" data-i18n="cookie_policy">Plus d'infos</a>
+        <a href="politique-confidentialite.html" class="cookie-link" data-i18n="cookie_policy">Plus d'infos</a>
       </div>
     </div>
   </div>
@@ -72,7 +52,6 @@
             <span class="sun-icon">☀️</span>
             <span class="moon-icon">🌙</span>
           </button>
-          <button id="login-btn" class="login-btn" data-i18n="login_button">Connexion</button>
         </div>
       </div>
     </div>
@@ -183,6 +162,10 @@
     </div>
   </section>
 
+
+
+
+
   <!-- CONTACT SECTION -->
   <section class="contact-newspaper" id="contact">
     <div class="container">
@@ -228,7 +211,7 @@
             <p>annexe.pasteur@gmail.com</p>
           </div>
           <div class="social-links-newspaper">
-            <a href="https://www.instagram.com/annexe_pasteur?igsh=MTR3cHQ0ZnY4dGk0Yw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
+            <a href="https://www.instagram.com/annexe_pasteur?igsh=MTR3cHQ0ZnY4dGk0Yw==" aria-label="Instagram">Instagram</a>
           </div>
         </div>
       </div>
@@ -241,14 +224,13 @@
       <div class="footer-bottom">
         <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur. <span data-i18n="all_rights">Tous droits réservés.</span></p>
         <div class="footer-links">
-          <a href="/Journal-Lyc-e-Pasteur/mentions-legales.html" data-i18n="legal">Mentions Légales</a>
-          <a href="/Journal-Lyc-e-Pasteur/politique-confidentialite.html" data-i18n="privacy">Confidentialité</a>
+          <a href="mentions-legales.html" data-i18n="legal">Mentions Légales</a>
+          <a href="politique-confidentialite.html" data-i18n="privacy">Confidentialité</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- CHEMIN CORRIGÉ POUR GITHUB PAGES -->
-  <script src="/Journal-Lyc-e-Pasteur/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
