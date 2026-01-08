@@ -25,6 +25,32 @@
   </script>
 </head>
 <body>
+  <!-- LOGIN MODAL -->
+  <div id="login-modal" class="login-modal">
+    <div class="login-content">
+      <button class="login-close" id="login-close" aria-label="Close">&times;</button>
+      <h2 data-i18n="login_title">Connexion</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email" data-i18n="label_email">Email</label>
+          <input type="email" id="login-email" name="email" placeholder="votre@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password" data-i18n="login_password">Mot de passe</label>
+          <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+        </div>
+        <div class="login-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember-me">
+            <span data-i18n="remember_me">Se souvenir de moi</span>
+          </label>
+          <a href="#" class="forgot-password" data-i18n="forgot_password">Mot de passe oublié?</a>
+        </div>
+        <button type="submit" class="btn-newspaper" data-i18n="login_submit">Se connecter</button>
+      </form>
+    </div>
+  </div>
+
   <!-- COOKIE CONSENT BANNER -->
   <div id="cookie-banner" class="cookie-banner">
     <div class="cookie-content">
@@ -52,6 +78,7 @@
             <span class="sun-icon">☀️</span>
             <span class="moon-icon">🌙</span>
           </button>
+          <button id="login-btn" class="login-btn" data-i18n="login_button">Connexion</button>
         </div>
       </div>
     </div>
