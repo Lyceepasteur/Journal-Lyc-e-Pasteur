@@ -47,7 +47,7 @@
       <p>Images : Unsplash.</p>
     </section>
     <div class="back-link">
-        <a href="Index.html" class="btn-newspaper">← Retour à l'accueil</a>
+        <a href="/Journal-Lyc-e-Pasteur/index.html" class="btn-newspaper">← Retour à l'accueil</a>
     </div>
   </main>
 
