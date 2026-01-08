@@ -5,6 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initCookieConsent();
+  initLogin();
   initDate();
   initTheme();
   initI18n();
@@ -45,6 +46,75 @@ function initCookieConsent() {
 }
 
 function enableAnalytics() {
+}
+
+/* ==================== LOGIN ==================== */
+function initLogin() {
+  const loginBtn = document.getElementById('login-btn');
+  const loginModal = document.getElementById('login-modal');
+  const loginClose = document.getElementById('login-close');
+  const loginForm = document.getElementById('login-form');
+  
+  if (!loginBtn || !loginModal) return;
+
+  loginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+  });
+
+  loginClose.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+  });
+
+  loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) {
+      loginModal.style.display = 'none';
+    }
+  });
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('login-email').value;
+    const rememberMe = document.getElementById('remember-me').checked;
+
+    localStorage.setItem('user-email', email);
+    localStorage.setItem('user-session', 'active');
+    if (rememberMe) {
+      localStorage.setItem('remember-email', email);
+    }
+    
+    alert(document.documentElement.lang === 'fr' ? 'Connexion réussie!' : 'Login successful!');
+    loginForm.reset();
+    loginModal.style.display = 'none';
+    
+    updateLoginButton();
+  });
+
+  updateLoginButton();
+}
+
+function updateLoginButton() {
+  const loginBtn = document.getElementById('login-btn');
+  const userSession = localStorage.getItem('user-session');
+  const userEmail = localStorage.getItem('user-email');
+  
+  if (userSession === 'active') {
+    loginBtn.textContent = userEmail ? userEmail.split('@')[0] : (document.documentElement.lang === 'fr' ? 'Déconnexion' : 'Logout');
+    loginBtn.classList.add('logged-in');
+    
+    loginBtn.onclick = () => {
+      localStorage.removeItem('user-email');
+      localStorage.removeItem('user-session');
+      alert(document.documentElement.lang === 'fr' ? 'Déconnecté' : 'Logged out');
+      updateLoginButton();
+    };
+  } else {
+    loginBtn.textContent = document.documentElement.lang === 'fr' ? 'Connexion' : 'Login';
+    loginBtn.classList.remove('logged-in');
+    loginBtn.onclick = () => {
+      document.getElementById('login-modal').style.display = 'flex';
+    };
+  }
 }
 
 /* ==================== DATE ==================== */
@@ -140,7 +210,13 @@ const translations = {
     cookie_message: "Ce site utilise des cookies pour améliorer votre expérience. Nous respectons votre vie privée.",
     cookie_accept: "Accepter",
     cookie_reject: "Refuser",
-    cookie_policy: "Plus d'infos"
+    cookie_policy: "Plus d'infos",
+    login_button: "Connexion",
+    login_title: "Connexion",
+    login_password: "Mot de passe",
+    login_submit: "Se connecter",
+    remember_me: "Se souvenir de moi",
+    forgot_password: "Mot de passe oublié?"
   },
   en: {
     edition_vol: "Volume 1 • No. 1",
@@ -206,7 +282,13 @@ const translations = {
     cookie_message: "This site uses cookies to enhance your experience. We respect your privacy.",
     cookie_accept: "Accept",
     cookie_reject: "Reject",
-    cookie_policy: "Learn more"
+    cookie_policy: "Learn more",
+    login_button: "Login",
+    login_title: "Login",
+    login_password: "Password",
+    login_submit: "Sign in",
+    remember_me: "Remember me",
+    forgot_password: "Forgot password?"
   }
 };
 
