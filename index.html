@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; frame-src https:;">
+  
+  <title>L'Ânnexe | Le Journal du Lycée Louis Pasteur</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3MFPG57DE0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3MFPG57DE0');
+  </script>
+</head>
+<body>
+  <!-- LOGIN MODAL -->
+  <div id="login-modal" class="login-modal">
+    <div class="login-content">
+      <button class="login-close" id="login-close" aria-label="Close">&times;</button>
+      <h2 data-i18n="login_title">Connexion</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email" data-i18n="label_email">Email</label>
+          <input type="email" id="login-email" name="email" placeholder="votre@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password" data-i18n="login_password">Mot de passe</label>
+          <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+        </div>
+        <div class="login-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember-me">
+            <span data-i18n="remember_me">Se souvenir de moi</span>
+          </label>
+          <a href="#" class="forgot-password" data-i18n="forgot_password">Mot de passe oublié?</a>
+        </div>
+        <button type="submit" class="btn-newspaper" data-i18n="login_submit">Se connecter</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- COOKIE CONSENT BANNER -->
+  <div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-content">
+      <p id="cookie-text" data-i18n="cookie_message">Ce site utilise des cookies pour améliorer votre expérience. Nous respectons votre vie privée.</p>
+      <div class="cookie-buttons">
+        <button id="cookie-accept" class="cookie-btn accept" data-i18n="cookie_accept">Accepter</button>
+        <button id="cookie-reject" class="cookie-btn reject" data-i18n="cookie_reject">Refuser</button>
+        <a href="politique-confidentialite.html" class="cookie-link" data-i18n="cookie_policy">Plus d'infos</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP BAR (Utility) -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-content">
+        <span class="date" id="current-date">Mercredi 7 Janvier 2026</span>
+        <div class="top-bar-actions">
+          <div class="language-selector">
+            <button class="lang-btn active" data-lang="fr">FR</button>
+            <span class="divider">|</span>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <button id="toggle-dark" class="theme-toggle" aria-label="Changer le thème">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+          </button>
+          <button id="login-btn" class="login-btn" data-i18n="login_button">Connexion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / MASTHEAD -->
+  <header class="masthead">
+    <div class="container">
+      <div class="masthead-inner">
+        <div class="edition-info left" data-i18n="edition_vol">Volume 1 • N° 1</div>
+        <div class="logo-container">
+          <h1 class="main-logo">L'Ânnexe</h1>
+        </div>
+        <div class="edition-info right" data-i18n="location">Avignon, France</div>
+      </div>
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a href="#accueil" class="nav-link active" data-i18n="nav_home">Accueil</a></li>
+          <li><a href="#journal" class="nav-link" data-i18n="nav_journal">Le Journal</a></li>
+		  <li><a href="archives.html" class="nav-link" data-i18n="nav_archives">Archives</a></li>
+          <li><a href="#contact" class="nav-link" data-i18n="nav_contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- FRONTPAGE HERO -->
+  <section class="hero-frontpage" id="accueil">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="main-feature">
+          <article class="featured-article">
+            <div class="category-tag" data-i18n="cat_edito">ÉDITO</div>
+            <h2 class="article-title large">
+              <a href="#" data-i18n="hero_title">Bienvenue dans la nouvelle ère de L'Ânnexe</a>
+            </h2>
+            <div class="article-meta">
+              <span class="author">Par La Rédaction</span> • <span class="time">5 min read</span>
+            </div>
+            <p class="article-excerpt" data-i18n="hero_excerpt">
+              Votre journal étudiant fait peau neuve. Plus moderne, plus engagé, plus proche de vous. Découvrez notre vision pour ce nouveau chapitre de la vie lycéenne.
+            </p>
+            <a href="#journal" class="btn-newspaper" data-i18n="read_more_btn">Lire l'édition complète</a>
+          </article>
+          <div class="hero-image">
+          </div>
+        </div>
+        
+        <div class="side-features">
+          <h3 class="side-title" data-i18n="trending_now">À LA UNE</h3>
+          <div class="side-article-list">
+            <article class="side-article">
+              <div class="category-tag small" data-i18n="cat_culture">CULTURE</div>
+              <h4><a href="#" data-i18n="side1_title">Sélection culturelle de l'hiver</a></h4>
+            </article>
+            <article class="side-article">
+              <div class="category-tag small" data-i18n="cat_sport">SPORT</div>
+              <h4><a href="#" data-i18n="side2_title">Nos équipes brillent en championnat</a></h4>
+            </article>
+            <article class="side-article">
+              <div class="category-tag small" data-i18n="cat_vie">VIE LYCÉENNE</div>
+              <h4><a href="#" data-i18n="side3_title">Les nouveaux projets du Lycée</a></h4>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE JOURNAL SECTION -->
+  <section class="journal-section" id="journal">
+    <div class="container">
+      <div class="section-header-newspaper">
+        <h2 data-i18n="journal_title">Édition Interactive</h2>
+        <p class="section-subtitle" data-i18n="journal_subtitle">Feuilletez le dernier numéro comme si vous y étiez</p>
+      </div>
+      
+      <div class="flipbook-wrapper">
+        <div class="flipbook-container">
+          <iframe 
+            src="https://online.fliphtml5.com/kfznz/l_annexe_edition2/"
+            class="flipbook-iframe"
+            allowfullscreen
+            loading="lazy"
+            title="Interactive Journal">
+          </iframe>
+        </div>
+        
+        <div class="journal-stats-newspaper">
+          <div class="stat-item">
+            <span class="stat-value" data-target="2">0</span>
+            <span class="stat-label" data-i18n="stat_edition">Édition</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="22">0</span>
+            <span class="stat-label" data-i18n="stat_articles">Articles</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="8">0</span>
+            <span class="stat-label" data-i18n="stat_team">Membres</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="44">0</span>
+            <span class="stat-label" data-i18n="stat_pages">Pages</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+  <!-- CONTACT SECTION -->
+  <section class="contact-newspaper" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-form-container">
+          <h2 data-i18n="contact_title">Nous Écrire</h2>
+          <form id="newspaper-contact-form" action="https://formsubmit.co/annexe.pasteur@gmail.com" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name" data-i18n="label_name">Nom</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="email" data-i18n="label_email">Email</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="subject" data-i18n="label_subject">Sujet</label>
+              <select id="subject" name="subject" required>
+                <option value="" data-i18n="opt_select">Choisir...</option>
+                <option value="article" data-i18n="opt_article">Proposer un article</option>
+                <option value="suggestion" data-i18n="opt_suggestion">Suggestion</option>
+                <option value="team" data-i18n="opt_team">Rejoindre l'équipe</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message" data-i18n="label_message">Message</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <input type="hidden" name="_captcha" value="false">
+            <button type="submit" class="btn-newspaper-submit" data-i18n="btn_send">Envoyer le message</button>
+          </form>
+        </div>
+        <div class="contact-info-newspaper">
+          <h2 data-i18n="find_us">Où nous trouver</h2>
+          <div class="info-block">
+            <h4 data-i18n="label_office">Rédaction</h4>
+            <p>Lycée Louis Pasteur<br>Avignon, France</p>
+          </div>
+          <div class="info-block">
+            <h4 data-i18n="label_mail">Contact Direct</h4>
+            <p>annexe.pasteur@gmail.com</p>
+          </div>
+          <div class="social-links-newspaper">
+            <a href="https://www.instagram.com/annexe_pasteur?igsh=MTR3cHQ0ZnY4dGk0Yw==" aria-label="Instagram">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-newspaper">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur. <span data-i18n="all_rights">Tous droits réservés.</span></p>
+        <div class="footer-links">
+          <a href="mentions-legales.html" data-i18n="legal">Mentions Légales</a>
+          <a href="politique-confidentialite.html" data-i18n="privacy">Confidentialité</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
