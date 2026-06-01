@@ -1,1 +1,0 @@
-# Journal-Lyc-e-Pasteur
