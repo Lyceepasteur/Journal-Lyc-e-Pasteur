@@ -54,12 +54,35 @@ function initLogin() {
   const loginModal = document.getElementById('login-modal');
   const loginClose = document.getElementById('login-close');
   const loginForm = document.getElementById('login-form');
+  const forgotPasswordLink = document.querySelector('.forgot-password');
+  const emailInput = document.getElementById('login-email');
+  const rememberCheckbox = document.getElementById('remember-me');
   
   if (!loginBtn || !loginModal) return;
 
+  const populateRememberedEmail = () => {
+    const savedEmail = localStorage.getItem('remember-email');
+    if (savedEmail && emailInput) {
+      emailInput.value = savedEmail;
+      if (rememberCheckbox) rememberCheckbox.checked = true;
+    }
+  };
+
+  populateRememberedEmail();
+
   loginBtn.addEventListener('click', () => {
+    populateRememberedEmail();
     loginModal.style.display = 'flex';
   });
+
+  if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert(document.documentElement.lang === 'fr'
+        ? 'Pour réinitialiser votre mot de passe, veuillez contacter la rédaction : annexe.pasteur@gmail.com'
+        : 'To reset your password, please contact the editorial office: annexe.pasteur@gmail.com');
+    });
+  }
 
   loginClose.addEventListener('click', () => {
     loginModal.style.display = 'none';
@@ -81,6 +104,8 @@ function initLogin() {
     localStorage.setItem('user-session', 'active');
     if (rememberMe) {
       localStorage.setItem('remember-email', email);
+    } else {
+      localStorage.removeItem('remember-email');
     }
     
     alert(document.documentElement.lang === 'fr' ? 'Connexion réussie!' : 'Login successful!');
@@ -129,11 +154,11 @@ function initDate() {
 
 /* ==================== THEME ==================== */
 function initTheme() {
-  const toggleBtn = document.getElementById('toggle-dark');
-  if (!toggleBtn) return;
-
   const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
+
+  const toggleBtn = document.getElementById('toggle-dark');
+  if (!toggleBtn) return;
 
   toggleBtn.addEventListener('click', () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -165,7 +190,13 @@ const translations = {
     cat_sport: "SPORT",
     side2_title: "Nos équipes brillent en championnat",
     cat_vie: "VIE LYCÉENNE",
-    side3_title: "Les nouveaux projets du CVL",
+    side3_title: "Les nouveaux projets du Lycée",
+    archive_title: "Archives",
+    archive_subtitle: "Retrouvez ici toutes les éditions du journal.",
+    archive_ed2_title: "Édition N°2",
+    archive_ed2_desc: "Volume 1 • N° 2 — Deuxième édition de L'Ânnexe",
+    archive_ed1_title: "Édition N°1",
+    archive_ed1_desc: "Volume 1 • N° 1 — Première édition de L'Ânnexe",
     journal_title: "Édition Interactive",
     journal_subtitle: "Feuilletez le dernier numéro comme si vous y étiez",
     stat_edition: "Édition",
@@ -205,6 +236,7 @@ const translations = {
     find_us: "Où nous trouver",
     label_office: "Rédaction",
     label_mail: "Contact Direct",
+    insta_btn: "Instagram du Lycée (@annexe_pasteur) ↗",
     all_rights: "Tous droits réservés.",
     legal: "Mentions Légales",
     privacy: "Confidentialité",
@@ -238,7 +270,13 @@ const translations = {
     cat_sport: "SPORT",
     side2_title: "Our teams shine in the championship",
     cat_vie: "STUDENT LIFE",
-    side3_title: "New CVL projects",
+    side3_title: "New High School projects",
+    archive_title: "Archives",
+    archive_subtitle: "Find all editions of the newspaper here.",
+    archive_ed2_title: "Edition No. 2",
+    archive_ed2_desc: "Volume 1 • No. 2 — Second edition of L'Ânnexe",
+    archive_ed1_title: "Edition No. 1",
+    archive_ed1_desc: "Volume 1 • No. 1 — First edition of L'Ânnexe",
     journal_title: "Interactive Edition",
     journal_subtitle: "Flip through the latest issue as if you were there",
     stat_edition: "Edition",
@@ -278,6 +316,7 @@ const translations = {
     find_us: "Find Us",
     label_office: "Editorial Office",
     label_mail: "Direct Contact",
+    insta_btn: "High School Instagram (@annexe_pasteur) ↗",
     all_rights: "All rights reserved.",
     legal: "Legal Notice",
     privacy: "Privacy Policy",
