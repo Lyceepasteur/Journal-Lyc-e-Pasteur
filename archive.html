@@ -18,21 +18,99 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="legal-page">
-  <header class="masthead small-masthead">
+  <!-- LOGIN MODAL -->
+  <div id="login-modal" class="login-modal">
+    <div class="login-content">
+      <button class="login-close" id="login-close" aria-label="Close">&times;</button>
+      <h2 data-i18n="login_title">Connexion</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email" data-i18n="label_email">Email</label>
+          <input type="email" id="login-email" name="email" placeholder="votre@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password" data-i18n="login_password">Mot de passe</label>
+          <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+        </div>
+        <div class="login-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember-me">
+            <span data-i18n="remember_me">Se souvenir de moi</span>
+          </label>
+          <a href="#" class="forgot-password" data-i18n="forgot_password">Mot de passe oublié?</a>
+        </div>
+        <button type="submit" class="btn-newspaper" data-i18n="login_submit">Se connecter</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOP BAR (Utility) -->
+  <div class="top-bar">
     <div class="container">
-      <h1 class="main-logo"><a href="Index.html">L'Ânnexe</a></h1>
+      <div class="top-bar-content">
+        <span class="date" id="current-date">Mercredi 7 Janvier 2026</span>
+        <div class="top-bar-actions">
+          <div class="language-selector">
+            <button class="lang-btn active" data-lang="fr">FR</button>
+            <span class="divider">|</span>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <button id="toggle-dark" class="theme-toggle" aria-label="Changer le thème">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+          </button>
+          <button id="login-btn" class="login-btn" data-i18n="login_button">Connexion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="container">
+      <div class="masthead-inner">
+        <div class="edition-info left"></div>
+        <div class="logo-container">
+          <h1 class="main-logo"><a href="index.html">L'Ânnexe</a></h1>
+        </div>
+        <div class="edition-info right" data-i18n="location">Avignon, France</div>
+      </div>
+      <nav class="main-nav">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link" data-i18n="nav_home">Accueil</a></li>
+          <li><a href="index.html#journal" class="nav-link" data-i18n="nav_journal">Le Journal</a></li>
+          <li><a href="archive.html" class="nav-link active" data-i18n="nav_archives">Archive</a></li>
+          <li><a href="index.html#contact" class="nav-link" data-i18n="nav_contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
   <main class="container legal-content">
     <section class="legal-section-text">
-      <h2>Archives</h2>
-      <p>Retrouvez ici les anciennes éditions du journal.</p>
+      <h2 data-i18n="archive_title">Archives</h2>
+      <p data-i18n="archive_subtitle">Retrouvez ici toutes les éditions du journal.</p>
     </section>
 
     <section style="margin-bottom: 3rem;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem;">Édition N°1</h3>
-      <p style="font-family: 'Lora', serif; color: var(--text-muted, #666); margin-bottom: 1.5rem;">Volume 1 • N° 1 — Première édition de L'Ânnexe</p>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem;" data-i18n="archive_ed2_title">Édition N°2</h3>
+      <p style="font-family: 'Lora', serif; color: var(--text-muted, #666); margin-bottom: 1.5rem;" data-i18n="archive_ed2_desc">Volume 1 • N° 2 — Deuxième édition de L'Ânnexe</p>
+
+      <div class="flipbook-wrapper">
+        <div class="flipbook-container">
+          <iframe
+            src="https://online.fliphtml5.com/kfznz/l_annexe_edition2/"
+            class="flipbook-iframe"
+            allowfullscreen
+            loading="lazy"
+            title="Journal L'Ânnexe - Édition 2">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem;" data-i18n="archive_ed1_title">Édition N°1</h3>
+      <p style="font-family: 'Lora', serif; color: var(--text-muted, #666); margin-bottom: 1.5rem;" data-i18n="archive_ed1_desc">Volume 1 • N° 1 — Première édition de L'Ânnexe</p>
 
       <div class="flipbook-wrapper">
         <div class="flipbook-container">
@@ -46,15 +124,17 @@
         </div>
       </div>
     </section>
-
-    <div class="back-link">
-      <a href="index.html" class="btn-newspaper">← Retour à l'accueil</a>
-    </div>
   </main>
 
   <footer class="footer-newspaper">
     <div class="container">
-      <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur.</p>
+      <div class="footer-bottom">
+        <p>&copy; 2026 L'Ânnexe - Lycée Louis Pasteur. <span data-i18n="all_rights">Tous droits réservés.</span></p>
+        <div class="footer-links">
+          <a href="mentions-legales.html" data-i18n="legal">Mentions Légales</a>
+          <a href="politique-confidentialite.html" data-i18n="privacy">Confidentialité</a>
+        </div>
+      </div>
     </div>
   </footer>
   <script src="script.js"></script>
