@@ -3,6 +3,16 @@
  * Main Script
  */
 
+/* ==================== SUPABASE AUTH CONFIGURATION ==================== */ 
+const SUPABASE_CONFIG = {
+  url: 'https://eyyolesztcnxlvyxcywq.supabase.co',
+  anonKey: 'sb_publishable_pxAaMNjZC5M5ss3eAjj9Wg_cbavpmSd'
+};
+
+let supabaseClient = null;
+let currentAuthSession = null;
+let activeAuthView = 'signin';
+
 document.addEventListener('DOMContentLoaded', () => {
   initCookieConsent();
   initLogin();
@@ -48,16 +58,181 @@ function initCookieConsent() {
 function enableAnalytics() {
 }
 
-/* ==================== LOGIN ==================== */
-function initLogin() {
+/* ==================== LOGIN (SUPABASE AUTH) ==================== */
+function isSupabaseConfigured() {
+  const { url, anonKey } = SUPABASE_CONFIG;
+  if (!url || !anonKey) return false;
+  if (url === 'VOTRE_URL_SUPABASE' || anonKey === 'VOTRE_CLE_ANON_PUBLIQUE_SUPABASE') return false;
+  return url.startsWith('https://') && url.includes('.supabase.co');
+}
+
+function getSupabaseClient() {
+  if (supabaseClient) return supabaseClient;
+  if (!isSupabaseConfigured()) return null;
+  if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
+    return null;
+  }
+  supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
+  return supabaseClient;
+}
+
+function getAuthRedirectUrl() {
+  if (!window.location.protocol.startsWith('http')) return undefined;
+  return window.location.origin + window.location.pathname;
+}
+
+function tAuth(key, fallback) {
+  const lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
+  return (translations[lang] && translations[lang][key]) || fallback;
+}
+
+function setAuthFeedback(message, type = 'info') {
+  const feedbackEl = document.getElementById('auth-feedback');
+  if (!feedbackEl) return;
+
+  if (!message) {
+    feedbackEl.textContent = '';
+    feedbackEl.hidden = true;
+    feedbackEl.className = 'auth-feedback';
+    return;
+  }
+
+  feedbackEl.textContent = message;
+  feedbackEl.className = `auth-feedback ${type}`;
+  feedbackEl.hidden = false;
+}
+
+function translateAuthError(error) {
+  const msg = (error && error.message ? error.message : '').toLowerCase();
+
+  if (msg.includes('invalid login credentials')) {
+    return tAuth('err_invalid_credentials', 'Email ou mot de passe incorrect.');
+  }
+  if (msg.includes('email not confirmed')) {
+    return tAuth('err_email_not_confirmed', 'Veuillez confirmer votre email avant de vous connecter.');
+  }
+  if (msg.includes('signups not allowed')) {
+    return tAuth('err_signup_disabled', 'Les inscriptions publiques sont désactivées. Contactez la rédaction.');
+  }
+  if (msg.includes('user already registered')) {
+    return tAuth('err_user_exists', 'Un compte existe déjà avec cet email.');
+  }
+  if (msg.includes('password should be at least') || msg.includes('weak password')) {
+    return tAuth('err_weak_password', 'Le mot de passe doit contenir au moins 8 caractères.');
+  }
+  if (msg.includes('rate limit') || msg.includes('too many requests') || msg.includes('security purposes')) {
+    return tAuth('err_rate_limit', 'Trop de tentatives. Patientez quelques instants avant de réessayer.');
+  }
+  return tAuth('err_generic', 'Une erreur est survenue. Veuillez réessayer.');
+}
+
+function showAuthView(view) {
+  activeAuthView = view;
+  const views = {
+    signin: document.getElementById('login-form'),
+    signup: document.getElementById('signup-form'),
+    forgot: document.getElementById('forgot-form'),
+    recovery: document.getElementById('recovery-form'),
+    account: document.getElementById('account-view')
+  };
+  const tabsEl = document.getElementById('auth-tabs');
+  const titleEl = document.getElementById('auth-modal-title');
+  const tabBtns = document.querySelectorAll('.auth-tab');
+
+  Object.entries(views).forEach(([name, el]) => {
+    if (el) el.hidden = name !== view;
+  });
+
+  if (tabsEl) {
+    tabsEl.hidden = view !== 'signin' && view !== 'signup';
+  }
+
+  tabBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-auth-tab') === view);
+  });
+
+  const titleKeys = {
+    signin: 'login_title',
+    signup: 'signup_title',
+    forgot: 'forgot_title',
+    recovery: 'recovery_title',
+    account: 'account_title'
+  };
+  if (titleEl) {
+    const key = titleKeys[view] || 'login_title';
+    titleEl.setAttribute('data-i18n', key);
+    titleEl.textContent = tAuth(key, 'Connexion');
+  }
+}
+
+function updateLoginButton() {
+  const loginBtn = document.getElementById('login-btn');
+  const accountEmailEl = document.getElementById('account-email');
+  const accountRoleEl = document.getElementById('account-role');
+  if (!loginBtn) return;
+
+  const user = currentAuthSession && currentAuthSession.user ? currentAuthSession.user : null;
+
+  if (user) {
+    const displayName = user.email ? user.email.split('@')[0] : tAuth('account_title', 'Mon compte');
+    loginBtn.textContent = displayName;
+    loginBtn.classList.add('logged-in');
+    loginBtn.dataset.loggedIn = 'true';
+
+    if (accountEmailEl) {
+      accountEmailEl.textContent = user.email || '';
+    }
+    if (accountRoleEl) {
+      const role = user.app_metadata && user.app_metadata.role ? String(user.app_metadata.role) : '';
+      accountRoleEl.textContent = role;
+      accountRoleEl.hidden = !role;
+    }
+  } else {
+    loginBtn.textContent = tAuth('login_button', 'Connexion');
+    loginBtn.classList.remove('logged-in');
+    loginBtn.dataset.loggedIn = 'false';
+
+    if (accountEmailEl) accountEmailEl.textContent = '';
+    if (accountRoleEl) {
+      accountRoleEl.textContent = '';
+      accountRoleEl.hidden = true;
+    }
+  }
+}
+
+function setFormBusy(form, busy) {
+  if (!form) return;
+  const submitBtn = form.querySelector('button[type="submit"]');
+  if (submitBtn) submitBtn.disabled = busy;
+}
+
+async function initLogin() {
   const loginBtn = document.getElementById('login-btn');
   const loginModal = document.getElementById('login-modal');
   const loginClose = document.getElementById('login-close');
   const loginForm = document.getElementById('login-form');
-  const forgotPasswordLink = document.querySelector('.forgot-password');
+  const signupForm = document.getElementById('signup-form');
+  const forgotForm = document.getElementById('forgot-form');
+  const recoveryForm = document.getElementById('recovery-form');
+  const changePasswordForm = document.getElementById('change-password-form');
+  const toggleChangePasswordBtn = document.getElementById('toggle-change-password-btn');
+  const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+  const backToSigninBtn = document.getElementById('back-to-signin-btn');
+  const logoutBtn = document.getElementById('logout-btn');
   const emailInput = document.getElementById('login-email');
   const rememberCheckbox = document.getElementById('remember-me');
-  
+  const tabBtns = document.querySelectorAll('.auth-tab');
+
+  // Nettoyage d'eventuelles anciennes sessions factices
+  localStorage.removeItem('user-session');
+  localStorage.removeItem('user-email');
+
   if (!loginBtn || !loginModal) return;
 
   const populateRememberedEmail = () => {
@@ -68,78 +243,312 @@ function initLogin() {
     }
   };
 
-  populateRememberedEmail();
+  const openAuthModal = (preferredView) => {
+    setAuthFeedback('');
+    if (changePasswordForm) changePasswordForm.hidden = true;
 
-  loginBtn.addEventListener('click', () => {
-    populateRememberedEmail();
+    const targetView = preferredView || (currentAuthSession && currentAuthSession.user ? 'account' : 'signin');
+    if (targetView === 'signin') {
+      populateRememberedEmail();
+    }
+    showAuthView(targetView);
+
+    if (!isSupabaseConfigured()) {
+      setAuthFeedback(
+        tAuth('err_not_configured', 'Authentification non configurée : ajoutez votre URL et clé publique Supabase dans script.js.'),
+        'info'
+      );
+    } else if (typeof window.supabase === 'undefined') {
+      setAuthFeedback(
+        tAuth('err_sdk_missing', 'Service d’authentification indisponible. Vérifiez votre connexion.'),
+        'error'
+      );
+    }
+
     loginModal.style.display = 'flex';
+  };
+
+  const closeAuthModal = () => {
+    loginModal.style.display = 'none';
+    setAuthFeedback('');
+  };
+
+  loginBtn.addEventListener('click', () => openAuthModal());
+  if (loginClose) loginClose.addEventListener('click', closeAuthModal);
+
+  loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) closeAuthModal();
   });
 
-  if (forgotPasswordLink) {
-    forgotPasswordLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      alert(document.documentElement.lang === 'fr'
-        ? 'Pour réinitialiser votre mot de passe, veuillez contacter la rédaction : annexe.pasteur@gmail.com'
-        : 'To reset your password, please contact the editorial office: annexe.pasteur@gmail.com');
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && loginModal.style.display === 'flex') {
+      closeAuthModal();
+    }
+  });
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setAuthFeedback('');
+      const tab = btn.getAttribute('data-auth-tab');
+      if (tab === 'signin') populateRememberedEmail();
+      showAuthView(tab);
+    });
+  });
+
+  if (forgotPasswordBtn) {
+    forgotPasswordBtn.addEventListener('click', () => {
+      setAuthFeedback('');
+      const forgotEmailInput = document.getElementById('forgot-email');
+      if (forgotEmailInput && emailInput && emailInput.value) {
+        forgotEmailInput.value = emailInput.value;
+      }
+      showAuthView('forgot');
     });
   }
 
-  loginClose.addEventListener('click', () => {
-    loginModal.style.display = 'none';
-  });
+  if (backToSigninBtn) {
+    backToSigninBtn.addEventListener('click', () => {
+      setAuthFeedback('');
+      showAuthView('signin');
+    });
+  }
 
-  loginModal.addEventListener('click', (e) => {
-    if (e.target === loginModal) {
-      loginModal.style.display = 'none';
+  if (toggleChangePasswordBtn && changePasswordForm) {
+    toggleChangePasswordBtn.addEventListener('click', () => {
+      setAuthFeedback('');
+      changePasswordForm.hidden = !changePasswordForm.hidden;
+    });
+  }
+
+  const client = getSupabaseClient();
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setAuthFeedback('');
+      if (!client) {
+        setAuthFeedback(tAuth('err_not_configured', 'Authentification Supabase non configurée.'), 'error');
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      const password = document.getElementById('login-password').value;
+      const rememberMe = rememberCheckbox ? rememberCheckbox.checked : false;
+
+      setFormBusy(loginForm, true);
+      try {
+        const { data, error } = await client.auth.signInWithPassword({ email, password });
+        if (error) {
+          setAuthFeedback(translateAuthError(error), 'error');
+          return;
+        }
+
+        if (rememberMe) {
+          localStorage.setItem('remember-email', email);
+        } else {
+          localStorage.removeItem('remember-email');
+        }
+
+        currentAuthSession = data.session;
+        loginForm.reset();
+        updateLoginButton();
+        closeAuthModal();
+      } catch {
+        setAuthFeedback(tAuth('err_generic', 'Une erreur est survenue. Veuillez réessayer.'), 'error');
+      } finally {
+        setFormBusy(loginForm, false);
+      }
+    });
+  }
+
+  if (signupForm) {
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setAuthFeedback('');
+      if (!client) {
+        setAuthFeedback(tAuth('err_not_configured', 'Authentification Supabase non configurée.'), 'error');
+        return;
+      }
+
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const passwordConfirm = document.getElementById('signup-password-confirm').value;
+
+      if (password.length < 8) {
+        setAuthFeedback(tAuth('err_weak_password', 'Le mot de passe doit contenir au moins 8 caractères.'), 'error');
+        return;
+      }
+      if (password !== passwordConfirm) {
+        setAuthFeedback(tAuth('err_password_mismatch', 'Les mots de passe ne correspondent pas.'), 'error');
+        return;
+      }
+
+      setFormBusy(signupForm, true);
+      try {
+        const redirectTo = getAuthRedirectUrl();
+        const { data, error } = await client.auth.signUp({
+          email,
+          password,
+          options: redirectTo ? { emailRedirectTo: redirectTo } : undefined
+        });
+
+        if (error) {
+          setAuthFeedback(translateAuthError(error), 'error');
+          return;
+        }
+
+        signupForm.reset();
+        if (data.session) {
+          currentAuthSession = data.session;
+          updateLoginButton();
+          closeAuthModal();
+        } else {
+          setAuthFeedback(
+            tAuth('signup_check_email', 'Compte créé ! Vérifiez votre boîte mail pour confirmer votre adresse.'),
+            'success'
+          );
+        }
+      } catch {
+        setAuthFeedback(tAuth('err_generic', 'Une erreur est survenue. Veuillez réessayer.'), 'error');
+      } finally {
+        setFormBusy(signupForm, false);
+      }
+    });
+  }
+
+  if (forgotForm) {
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setAuthFeedback('');
+      if (!client) {
+        setAuthFeedback(tAuth('err_not_configured', 'Authentification Supabase non configurée.'), 'error');
+        return;
+      }
+
+      const email = document.getElementById('forgot-email').value.trim();
+      setFormBusy(forgotForm, true);
+      try {
+        const redirectTo = getAuthRedirectUrl();
+        const { error } = await client.auth.resetPasswordForEmail(
+          email,
+          redirectTo ? { redirectTo } : undefined
+        );
+
+        if (error) {
+          setAuthFeedback(translateAuthError(error), 'error');
+          return;
+        }
+
+        forgotForm.reset();
+        setAuthFeedback(
+          tAuth('forgot_sent', 'Si un compte existe pour cet email, un lien de réinitialisation vient d’être envoyé.'),
+          'success'
+        );
+      } catch {
+        setAuthFeedback(tAuth('err_generic', 'Une erreur est survenue. Veuillez réessayer.'), 'error');
+      } finally {
+        setFormBusy(forgotForm, false);
+      }
+    });
+  }
+
+  const handlePasswordUpdate = async (form, passId, confirmId) => {
+    setAuthFeedback('');
+    if (!client) return;
+
+    const newPassword = document.getElementById(passId).value;
+    const confirmPassword = document.getElementById(confirmId).value;
+
+    if (newPassword.length < 8) {
+      setAuthFeedback(tAuth('err_weak_password', 'Le mot de passe doit contenir au moins 8 caractères.'), 'error');
+      return;
     }
-  });
-
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const email = document.getElementById('login-email').value;
-    const rememberMe = document.getElementById('remember-me').checked;
-
-    localStorage.setItem('user-email', email);
-    localStorage.setItem('user-session', 'active');
-    if (rememberMe) {
-      localStorage.setItem('remember-email', email);
-    } else {
-      localStorage.removeItem('remember-email');
+    if (newPassword !== confirmPassword) {
+      setAuthFeedback(tAuth('err_password_mismatch', 'Les mots de passe ne correspondent pas.'), 'error');
+      return;
     }
-    
-    alert(document.documentElement.lang === 'fr' ? 'Connexion réussie!' : 'Login successful!');
-    loginForm.reset();
-    loginModal.style.display = 'none';
-    
-    updateLoginButton();
-  });
+
+    setFormBusy(form, true);
+    try {
+      const { error } = await client.auth.updateUser({ password: newPassword });
+      if (error) {
+        setAuthFeedback(translateAuthError(error), 'error');
+        return;
+      }
+
+      form.reset();
+      if (form === changePasswordForm) changePasswordForm.hidden = true;
+      showAuthView('account');
+      setAuthFeedback(tAuth('password_updated', 'Mot de passe mis à jour avec succès.'), 'success');
+    } catch {
+      setAuthFeedback(tAuth('err_generic', 'Une erreur est survenue. Veuillez réessayer.'), 'error');
+    } finally {
+      setFormBusy(form, false);
+    }
+  };
+
+  if (recoveryForm) {
+    recoveryForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handlePasswordUpdate(recoveryForm, 'new-password', 'new-password-confirm');
+    });
+  }
+
+  if (changePasswordForm) {
+    changePasswordForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handlePasswordUpdate(changePasswordForm, 'account-new-password', 'account-new-password-confirm');
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      if (!client) return;
+      logoutBtn.disabled = true;
+      try {
+        await client.auth.signOut();
+      } finally {
+        currentAuthSession = null;
+        logoutBtn.disabled = false;
+        updateLoginButton();
+        closeAuthModal();
+      }
+    });
+  }
+
+  if (client) {
+    client.auth.onAuthStateChange((event, session) => {
+      currentAuthSession = session;
+      updateLoginButton();
+
+      if (event === 'PASSWORD_RECOVERY') {
+        openAuthModal('recovery');
+        setAuthFeedback(
+          tAuth('recovery_prompt', 'Lien validé. Définissez votre nouveau mot de passe ci-dessous.'),
+          'info'
+        );
+      }
+    });
+
+    try {
+      const { data } = await client.auth.getSession();
+      currentAuthSession = data ? data.session : null;
+    } catch {
+      currentAuthSession = null;
+    }
+  }
+
+  if (window.location.hash && window.location.hash.includes('error_description=')) {
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const errDesc = hashParams.get('error_description');
+    if (errDesc) {
+      openAuthModal('signin');
+      setAuthFeedback(tAuth('err_link_expired', 'Ce lien est invalide ou expiré. Veuillez recommencer.'), 'error');
+    }
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
 
   updateLoginButton();
-}
-
-function updateLoginButton() {
-  const loginBtn = document.getElementById('login-btn');
-  const userSession = localStorage.getItem('user-session');
-  const userEmail = localStorage.getItem('user-email');
-  
-  if (userSession === 'active') {
-    loginBtn.textContent = userEmail ? userEmail.split('@')[0] : (document.documentElement.lang === 'fr' ? 'Déconnexion' : 'Logout');
-    loginBtn.classList.add('logged-in');
-    
-    loginBtn.onclick = () => {
-      localStorage.removeItem('user-email');
-      localStorage.removeItem('user-session');
-      alert(document.documentElement.lang === 'fr' ? 'Déconnecté' : 'Logged out');
-      updateLoginButton();
-    };
-  } else {
-    loginBtn.textContent = document.documentElement.lang === 'fr' ? 'Connexion' : 'Login';
-    loginBtn.classList.remove('logged-in');
-    loginBtn.onclick = () => {
-      document.getElementById('login-modal').style.display = 'flex';
-    };
-  }
 }
 
 /* ==================== DATE ==================== */
@@ -246,10 +655,43 @@ const translations = {
     cookie_policy: "Plus d'infos",
     login_button: "Connexion",
     login_title: "Connexion",
+    signup_title: "Inscription",
+    forgot_title: "Mot de passe oublié",
+    recovery_title: "Nouveau mot de passe",
+    account_title: "Mon compte",
+    tab_signin: "Connexion",
+    tab_signup: "Inscription",
     login_password: "Mot de passe",
+    confirm_password: "Confirmer le mot de passe",
+    new_password: "Nouveau mot de passe",
+    password_hint: "Minimum 8 caractères.",
     login_submit: "Se connecter",
+    signup_submit: "Créer un compte",
+    forgot_desc: "Entrez votre email pour recevoir un lien de réinitialisation sécurisé.",
+    forgot_submit: "Envoyer le lien",
+    back_to_signin: "← Retour à la connexion",
+    recovery_desc: "Choisissez votre nouveau mot de passe.",
+    recovery_submit: "Enregistrer le mot de passe",
+    account_connected_as: "Connecté en tant que",
+    change_password_btn: "Changer mon mot de passe",
+    logout_btn: "Se déconnecter",
     remember_me: "Se souvenir de moi",
-    forgot_password: "Mot de passe oublié?"
+    forgot_password: "Mot de passe oublié?",
+    signup_check_email: "Compte créé ! Vérifiez votre boîte mail pour confirmer votre adresse.",
+    forgot_sent: "Si un compte existe pour cet email, un lien de réinitialisation vient d’être envoyé.",
+    password_updated: "Mot de passe mis à jour avec succès.",
+    recovery_prompt: "Lien validé. Définissez votre nouveau mot de passe ci-dessous.",
+    err_not_configured: "Authentification non configurée : ajoutez votre URL et clé publique Supabase dans script.js.",
+    err_sdk_missing: "Service d’authentification indisponible. Vérifiez votre connexion.",
+    err_invalid_credentials: "Email ou mot de passe incorrect.",
+    err_email_not_confirmed: "Veuillez confirmer votre email avant de vous connecter.",
+    err_signup_disabled: "Les inscriptions publiques sont désactivées. Contactez la rédaction.",
+    err_user_exists: "Un compte existe déjà avec cet email.",
+    err_weak_password: "Le mot de passe doit contenir au moins 8 caractères.",
+    err_password_mismatch: "Les mots de passe ne correspondent pas.",
+    err_rate_limit: "Trop de tentatives. Patientez quelques instants avant de réessayer.",
+    err_link_expired: "Ce lien est invalide ou expiré. Veuillez recommencer.",
+    err_generic: "Une erreur est survenue. Veuillez réessayer."
   },
   en: {
     edition_vol: "Volume 1 • No. 1",
@@ -326,17 +768,54 @@ const translations = {
     cookie_policy: "Learn more",
     login_button: "Login",
     login_title: "Login",
+    signup_title: "Sign Up",
+    forgot_title: "Forgot Password",
+    recovery_title: "New Password",
+    account_title: "My Account",
+    tab_signin: "Sign In",
+    tab_signup: "Sign Up",
     login_password: "Password",
+    confirm_password: "Confirm password",
+    new_password: "New password",
+    password_hint: "Minimum 8 characters.",
     login_submit: "Sign in",
+    signup_submit: "Create account",
+    forgot_desc: "Enter your email to receive a secure password reset link.",
+    forgot_submit: "Send reset link",
+    back_to_signin: "← Back to sign in",
+    recovery_desc: "Choose your new password.",
+    recovery_submit: "Save password",
+    account_connected_as: "Signed in as",
+    change_password_btn: "Change password",
+    logout_btn: "Sign out",
     remember_me: "Remember me",
-    forgot_password: "Forgot password?"
+    forgot_password: "Forgot password?",
+    signup_check_email: "Account created! Check your inbox to confirm your email address.",
+    forgot_sent: "If an account exists for this email, a reset link has been sent.",
+    password_updated: "Password updated successfully.",
+    recovery_prompt: "Link verified. Set your new password below.",
+    err_not_configured: "Authentication not configured: add your Supabase URL and public key in script.js.",
+    err_sdk_missing: "Authentication service unavailable. Please check your connection.",
+    err_invalid_credentials: "Incorrect email or password.",
+    err_email_not_confirmed: "Please confirm your email address before signing in.",
+    err_signup_disabled: "Public sign-ups are disabled. Please contact the editorial office.",
+    err_user_exists: "An account already exists with this email.",
+    err_weak_password: "Password must be at least 8 characters long.",
+    err_password_mismatch: "Passwords do not match.",
+    err_rate_limit: "Too many attempts. Please wait a moment before trying again.",
+    err_link_expired: "This link is invalid or expired. Please request a new one.",
+    err_generic: "An error occurred. Please try again."
   }
 };
 
 function initI18n() {
   const langBtns = document.querySelectorAll('.lang-btn');
   const savedLang = localStorage.getItem('lang') || 'fr';
-  
+
+  langBtns.forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === savedLang);
+  });
+
   updateLanguage(savedLang);
 
   langBtns.forEach(btn => {
@@ -357,6 +836,7 @@ function updateLanguage(lang) {
   const elements = document.querySelectorAll('[data-i18n]');
   
   elements.forEach(el => {
+    if (el.id === 'login-btn' && el.dataset.loggedIn === 'true') return;
     const key = el.getAttribute('data-i18n');
     if (translations[lang] && translations[lang][key]) {
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
@@ -367,6 +847,7 @@ function updateLanguage(lang) {
     }
   });
 
+  updateLoginButton();
   initDate(); // Refresh date format
 }
 
