@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; frame-src https:;">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://*.fliphtml5.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none';">
   
   <title>L'Ânnexe | Le Journal du Lycée Louis Pasteur</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23fdfaf6'/%3E%3Ctext x='32' y='54' font-family='Georgia, serif' font-size='50' font-weight='900' fill='%231a1a1a' text-anchor='middle'%3E%C3%82%3C/text%3E%3C/svg%3E">
@@ -28,28 +27,106 @@
 </head>
 <body>
   <!-- LOGIN MODAL -->
-  <div id="login-modal" class="login-modal">
+  <div id="login-modal" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
     <div class="login-content">
-      <button class="login-close" id="login-close" aria-label="Close">&times;</button>
-      <h2 data-i18n="login_title">Connexion</h2>
-      <form id="login-form">
+      <button type="button" class="login-close" id="login-close" aria-label="Fermer">&times;</button>
+      <h2 id="auth-modal-title" data-i18n="login_title">Connexion</h2>
+
+      <div id="auth-feedback" class="auth-feedback" role="alert" hidden></div>
+
+      <div id="auth-tabs" class="auth-tabs">
+        <button type="button" class="auth-tab active" data-auth-tab="signin" data-i18n="tab_signin">Connexion</button>
+        <button type="button" class="auth-tab" data-auth-tab="signup" data-i18n="tab_signup">Inscription</button>
+      </div>
+
+      <!-- SIGN IN VIEW -->
+      <form id="login-form" class="auth-view">
         <div class="form-group">
           <label for="login-email" data-i18n="label_email">Email</label>
-          <input type="email" id="login-email" name="email" placeholder="votre@email.com" required>
+          <input type="email" id="login-email" name="email" autocomplete="email" placeholder="votre@email.com" required>
         </div>
         <div class="form-group">
           <label for="login-password" data-i18n="login_password">Mot de passe</label>
-          <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="••••••••" required>
         </div>
         <div class="login-options">
           <label class="remember-me">
             <input type="checkbox" id="remember-me">
             <span data-i18n="remember_me">Se souvenir de moi</span>
           </label>
-          <a href="#" class="forgot-password" data-i18n="forgot_password">Mot de passe oublié?</a>
+          <button type="button" id="forgot-password-btn" class="forgot-password btn-link-inline" data-i18n="forgot_password">Mot de passe oublié?</button>
         </div>
         <button type="submit" class="btn-newspaper" data-i18n="login_submit">Se connecter</button>
       </form>
+
+      <!-- SIGN UP VIEW -->
+      <form id="signup-form" class="auth-view" hidden>
+        <div class="form-group">
+          <label for="signup-email" data-i18n="label_email">Email</label>
+          <input type="email" id="signup-email" name="email" autocomplete="email" placeholder="votre@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="signup-password" data-i18n="login_password">Mot de passe</label>
+          <input type="password" id="signup-password" name="password" autocomplete="new-password" minlength="8" placeholder="••••••••" required>
+          <small class="auth-hint" data-i18n="password_hint">Minimum 8 caractères.</small>
+        </div>
+        <div class="form-group">
+          <label for="signup-password-confirm" data-i18n="confirm_password">Confirmer le mot de passe</label>
+          <input type="password" id="signup-password-confirm" name="password_confirm" autocomplete="new-password" minlength="8" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-newspaper" data-i18n="signup_submit">Créer un compte</button>
+      </form>
+
+      <!-- FORGOT PASSWORD VIEW -->
+      <form id="forgot-form" class="auth-view" hidden>
+        <p class="auth-description" data-i18n="forgot_desc">Entrez votre email pour recevoir un lien de réinitialisation sécurisé.</p>
+        <div class="form-group">
+          <label for="forgot-email" data-i18n="label_email">Email</label>
+          <input type="email" id="forgot-email" name="email" autocomplete="email" placeholder="votre@email.com" required>
+        </div>
+        <button type="submit" class="btn-newspaper" data-i18n="forgot_submit">Envoyer le lien</button>
+        <button type="button" id="back-to-signin-btn" class="btn-link-inline auth-back-btn" data-i18n="back_to_signin">← Retour à la connexion</button>
+      </form>
+
+      <!-- PASSWORD RECOVERY / UPDATE VIEW -->
+      <form id="recovery-form" class="auth-view" hidden>
+        <p class="auth-description" data-i18n="recovery_desc">Choisissez votre nouveau mot de passe.</p>
+        <div class="form-group">
+          <label for="new-password" data-i18n="new_password">Nouveau mot de passe</label>
+          <input type="password" id="new-password" name="new_password" autocomplete="new-password" minlength="8" placeholder="••••••••" required>
+        </div>
+        <div class="form-group">
+          <label for="new-password-confirm" data-i18n="confirm_password">Confirmer le mot de passe</label>
+          <input type="password" id="new-password-confirm" name="new_password_confirm" autocomplete="new-password" minlength="8" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-newspaper" data-i18n="recovery_submit">Enregistrer le mot de passe</button>
+      </form>
+
+      <!-- LOGGED-IN ACCOUNT VIEW -->
+      <div id="account-view" class="auth-view" hidden>
+        <div class="account-card">
+          <p class="account-label" data-i18n="account_connected_as">Connecté en tant que</p>
+          <p id="account-email" class="account-email"></p>
+          <span id="account-role" class="account-role-badge" hidden></span>
+        </div>
+
+        <form id="change-password-form" class="account-password-form" hidden>
+          <div class="form-group">
+            <label for="account-new-password" data-i18n="new_password">Nouveau mot de passe</label>
+            <input type="password" id="account-new-password" autocomplete="new-password" minlength="8" placeholder="••••••••" required>
+          </div>
+          <div class="form-group">
+            <label for="account-new-password-confirm" data-i18n="confirm_password">Confirmer le mot de passe</label>
+            <input type="password" id="account-new-password-confirm" autocomplete="new-password" minlength="8" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn-newspaper" data-i18n="recovery_submit">Enregistrer le mot de passe</button>
+        </form>
+
+        <div class="account-actions">
+          <button type="button" id="toggle-change-password-btn" class="btn-newspaper-secondary" data-i18n="change_password_btn">Changer mon mot de passe</button>
+          <button type="button" id="logout-btn" class="btn-newspaper" data-i18n="logout_btn">Se déconnecter</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -263,6 +340,7 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
 </html>
